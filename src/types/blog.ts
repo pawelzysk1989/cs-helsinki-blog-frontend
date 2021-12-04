@@ -3,7 +3,7 @@ export interface Blog {
   title: string;
   author: string;
   url: string;
-  likes?: number;
+  likes: number;
 }
 
-export type BlogForm = Omit<Blog, 'id'>;
+export type BlogFormState = Omit<Blog, 'id'>;
