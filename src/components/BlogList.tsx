@@ -5,10 +5,10 @@ import BlogRow from './BlogRow';
 
 type Props = {
   blogs: Blog[];
-  handleDelete: (blog: Blog) => void;
+  onDelete: (blog: Blog) => void;
 };
 
-const BlogList = ({ blogs, handleDelete }: Props) => (
+const BlogList = ({ blogs, onDelete }: Props) => (
   <table className="table">
     <thead>
       <tr>
@@ -18,7 +18,7 @@ const BlogList = ({ blogs, handleDelete }: Props) => (
     </thead>
     <tbody>
       {blogs.map((blog) => (
-        <BlogRow key={blog.id} blog={blog} handleDelete={handleDelete} />
+        <BlogRow key={blog.id} blog={blog} onDelete={onDelete} />
       ))}
     </tbody>
   </table>

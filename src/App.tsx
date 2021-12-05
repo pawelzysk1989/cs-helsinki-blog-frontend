@@ -58,16 +58,20 @@ const App = () => {
     setUser(null);
     authService.logout();
   };
-  const handleNewBlogSubmit = async (blog: BlogFormState, reset: () => void) => {
+  const createBlog = async (blog: BlogFormState, reset: () => void) => {
     try {
       const newBlog = await blogService.create(blog);
       setBlogs((blogs) => blogs.concat(newBlog));
       reset();
+      addNotifiaction({
+        type: 'success',
+        message: `A new blog '${newBlog.title}' by ${newBlog.author} added`,
+      });
     } catch (error) {
       handleError(error);
     }
   };
-  const handleBlogRemove = async (blogToDelete: Blog) => {
+  const removeBlog = async (blogToDelete: Blog) => {
     if (window.confirm(`Delete ${blogToDelete.title}?`)) {
       try {
         await blogService.delete(blogToDelete);
@@ -86,10 +90,10 @@ const App = () => {
             <UserInfo user={user} onLogout={handleLogout} />
           </Section>
           <Section title="Create new">
-            <BlogForm onSubmit={handleNewBlogSubmit} />
+            <BlogForm onSubmit={createBlog} />
           </Section>
           <Section title="Blogs">
-            <BlogList blogs={blogs} handleDelete={handleBlogRemove} />
+            <BlogList blogs={blogs} onDelete={removeBlog} />
           </Section>
         </>
       ) : (
