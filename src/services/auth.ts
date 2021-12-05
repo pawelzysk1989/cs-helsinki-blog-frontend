@@ -1,11 +1,30 @@
 import axios from 'axios';
 
-import { LoginFormState, User } from '../types/user';
+import { Credentials, User } from '../types/user';
+import localStorage from './local_storage';
+
 const baseUrl = '/api/login';
 
-const login = async (credentials: LoginFormState) => {
-  const response = await axios.post<User>(baseUrl, credentials);
-  return response.data;
+const storedLoggedUser = localStorage.storeItem<User>('loggedUser');
+
+const setLoggedUser = storedLoggedUser.set;
+const getLoggedUser = storedLoggedUser.get;
+const removeLoggedUser = storedLoggedUser.remove;
+
+const getToken = () => {
+  const storedToken = getLoggedUser()?.token;
+  return storedToken && `Bearer ${storedToken}`;
 };
 
-export default { login };
+const login = async (credentials: Credentials) => {
+  const response = await axios.post<User>(baseUrl, credentials);
+  const user = response.data;
+  setLoggedUser(user);
+  return user;
+};
+
+const logout = () => {
+  removeLoggedUser();
+};
+
+export default { login, logout, getLoggedUser, getToken };

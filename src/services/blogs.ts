@@ -1,37 +1,35 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
 import { Blog, BlogFormState } from '../types/blog';
-import { Unset } from '../types/unset';
+import authService from './auth';
 
 const baseUrl = '/api/blogs';
 
-let token: string | Unset = null;
-
-const setToken = (newToken: string) => {
-  token = `bearer ${newToken}`;
+const getConfig = (): AxiosRequestConfig => {
+  const token = authService.getToken();
+  const headers: Record<string, string> = token ? { Authorization: token } : {};
+  return {
+    headers,
+  };
 };
 
 const getAll = () => {
-  const request = axios.get<Blog[]>(baseUrl);
+  const request = axios.get<Blog[]>(baseUrl, getConfig());
   return request.then((response) => response.data);
 };
 
 const create = async (newObject: BlogFormState) => {
-  if (!token) {
-    throw Error('token missing on the client');
-  }
-
-  const config = {
-    headers: { Authorization: token },
-  };
-
-  const response = await axios.post<Blog>(baseUrl, newObject, config);
+  const response = await axios.post<Blog>(baseUrl, newObject, getConfig());
   return response.data;
 };
 
 const update = async (newObject: Blog) => {
-  const response = await axios.put<Blog>(`${baseUrl}/${newObject.id}`, newObject);
+  const response = await axios.put<Blog>(
+    `${baseUrl}/${newObject.id}`,
+    newObject,
+    getConfig(),
+  );
   return response.data;
 };
 
-export default { getAll, create, update, setToken };
+export default { getAll, create, update };

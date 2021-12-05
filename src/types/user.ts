@@ -5,7 +5,7 @@ export interface User {
   token: string;
 }
 
-export interface LoginFormState {
+export interface Credentials {
   username: string;
   password: string;
 }

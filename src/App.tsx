@@ -1,34 +1,46 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import LoginForm from './components/LoginForm';
 import Notifications from './components/Notifications';
 import Section from './components/Section';
+import UserInfo from './components/UserInfo';
 import authService from './services/auth';
 import blogService from './services/blogs';
+import { Blog } from './types/blog';
 import { Notification } from './types/notification';
 import { isServerError } from './types/server_error';
 import { Unset } from './types/unset';
-import { LoginFormState, User } from './types/user';
-import isUnset from './utils/is_unset';
+import { Credentials, User } from './types/user';
+import isSet from './utils/is_set';
 
 const App = () => {
+  const [user, setUser] = useState<User | Unset>(authService.getLoggedUser);
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [user, setUser] = useState<User | Unset>(null);
+  const [blogs, setBlogs] = useState<Blog[]>([]);
 
-  const submitLoginForm = async (loginFormState: LoginFormState, reset: () => void) => {
+  useEffect(() => {
+    if (isSet(user)) {
+      blogService.getAll().then(setBlogs).catch(handleError);
+    } else {
+      setBlogs([]);
+    }
+  }, [user]);
+
+  const handleError = (error: unknown) => {
+    addNotifiaction({
+      type: 'error',
+      message: isServerError(error)
+        ? error.response?.data.error ?? error.message
+        : String(error),
+    });
+  };
+
+  const handleLogin = async (loginFormState: Credentials) => {
     try {
       const user = await authService.login(loginFormState);
-      blogService.setToken(user.token);
-      window.localStorage.setItem('loggedNoteappUser', JSON.stringify(user));
       setUser(user);
-      reset();
     } catch (error) {
-      addNotifiaction({
-        type: 'error',
-        message: isServerError(error)
-          ? error.response?.data.error ?? error.message
-          : String(error),
-      });
+      handleError(error);
     }
   };
   const addNotifiaction = (newNotification: Notification) => {
@@ -40,12 +52,27 @@ const App = () => {
       setNotifications(clearedNotifications);
     }, 5000);
   };
+  const handleLogout = () => {
+    setUser(null);
+    authService.logout();
+  };
   return (
     <>
       {Boolean(notifications.length) && <Notifications notifications={notifications} />}
-      {isUnset(user) && (
+      {isSet(user) ? (
+        <>
+          <Section>
+            <UserInfo user={user} onLogout={handleLogout} />
+          </Section>
+          <Section title="Blogs">
+            <pre>
+              <code>{JSON.stringify(blogs, null, 2)}</code>
+            </pre>
+          </Section>
+        </>
+      ) : (
         <Section title="Log in">
-          <LoginForm onSubmit={submitLoginForm} />
+          <LoginForm onSubmit={handleLogin} />
         </Section>
       )}
     </>

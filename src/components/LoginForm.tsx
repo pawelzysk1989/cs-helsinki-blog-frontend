@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import { LoginFormState } from '../types/user';
+import { Credentials } from '../types/user';
 import InputField from './InputField';
 
 type Props = {
-  onSubmit: (payload: LoginFormState, reset: () => void) => void;
+  onSubmit: (payload: Credentials) => void;
 };
 
 const LoginForm = ({ onSubmit }: Props) => {
@@ -14,15 +14,12 @@ const LoginForm = ({ onSubmit }: Props) => {
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const loginForm: LoginFormState = {
+    const loginForm: Credentials = {
       username,
       password,
     };
 
-    onSubmit(loginForm, () => {
-      setUsername('');
-      setPassword('');
-    });
+    onSubmit(loginForm);
   };
 
   const isDisabled = [username, password].some((val) => val === '');
