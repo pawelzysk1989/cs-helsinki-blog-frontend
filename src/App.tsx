@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
+import BlogForm from './components/BlogForm';
+import BlogList from './components/BlogList';
 import LoginForm from './components/LoginForm';
 import Notifications from './components/Notifications';
 import Section from './components/Section';
 import UserInfo from './components/UserInfo';
 import authService from './services/auth';
 import blogService from './services/blogs';
-import { Blog } from './types/blog';
+import { Blog, BlogFormState } from './types/blog';
 import { Notification } from './types/notification';
 import { isServerError } from './types/server_error';
 import { Unset } from './types/unset';
@@ -56,6 +58,25 @@ const App = () => {
     setUser(null);
     authService.logout();
   };
+  const handleNewBlogSubmit = async (blog: BlogFormState, reset: () => void) => {
+    try {
+      const newBlog = await blogService.create(blog);
+      setBlogs((blogs) => blogs.concat(newBlog));
+      reset();
+    } catch (error) {
+      handleError(error);
+    }
+  };
+  const handleBlogRemove = async (blogToDelete: Blog) => {
+    if (window.confirm(`Delete ${blogToDelete.title}?`)) {
+      try {
+        await blogService.delete(blogToDelete);
+        setBlogs(blogs.filter((blog) => blog.id !== blogToDelete.id));
+      } catch (error) {
+        handleError(error);
+      }
+    }
+  };
   return (
     <>
       {Boolean(notifications.length) && <Notifications notifications={notifications} />}
@@ -64,10 +85,11 @@ const App = () => {
           <Section>
             <UserInfo user={user} onLogout={handleLogout} />
           </Section>
+          <Section title="Create new">
+            <BlogForm onSubmit={handleNewBlogSubmit} />
+          </Section>
           <Section title="Blogs">
-            <pre>
-              <code>{JSON.stringify(blogs, null, 2)}</code>
-            </pre>
+            <BlogList blogs={blogs} handleDelete={handleBlogRemove} />
           </Section>
         </>
       ) : (

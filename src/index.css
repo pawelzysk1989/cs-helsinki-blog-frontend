@@ -41,6 +41,19 @@ code {
   content: ':';
 }
 
+.table {
+  padding: 1rem;
+}
+
+.table-hd-cell {
+  text-transform: uppercase;
+  text-align: left;
+}
+
+.table .table-row .table-cell {
+  padding-left: 1rem;
+}
+
 .notification {
   margin-bottom: 1rem;
   border-radius: 0.5rem;

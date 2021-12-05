@@ -6,4 +6,4 @@ export interface Blog {
   likes: number;
 }
 
-export type BlogFormState = Omit<Blog, 'id'>;
+export type BlogFormState = Omit<Blog, 'id' | 'likes'>;
