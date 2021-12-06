@@ -29,9 +29,14 @@ const App = () => {
   }, [user]);
 
   const handleError = (error: unknown) => {
+    const isErrorFromServer = isServerError(error);
+    if (isErrorFromServer && error.response?.status === 401) {
+      logout();
+    }
+
     addNotifiaction({
       type: 'error',
-      message: isServerError(error)
+      message: isErrorFromServer
         ? error.response?.data.error ?? error.message
         : String(error),
     });
@@ -54,7 +59,7 @@ const App = () => {
       setNotifications(clearedNotifications);
     }, 5000);
   };
-  const handleLogout = () => {
+  const logout = () => {
     setUser(null);
     authService.logout();
   };
@@ -87,7 +92,7 @@ const App = () => {
       {isSet(user) ? (
         <>
           <Section>
-            <UserInfo user={user} onLogout={handleLogout} />
+            <UserInfo user={user} onLogout={logout} />
           </Section>
           <Section title="Create new">
             <BlogForm onSubmit={createBlog} />
