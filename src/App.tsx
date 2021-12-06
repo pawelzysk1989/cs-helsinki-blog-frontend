@@ -21,12 +21,8 @@ const App = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
 
   useEffect(() => {
-    if (isSet(user)) {
-      blogService.getAll().then(setBlogs).catch(handleError);
-    } else {
-      setBlogs([]);
-    }
-  }, [user]);
+    blogService.getAll().then(setBlogs).catch(handleError);
+  }, []);
 
   const handleError = (error: unknown) => {
     const isErrorFromServer = isServerError(error);
@@ -97,15 +93,15 @@ const App = () => {
           <Section title="Create new">
             <BlogForm onSubmit={createBlog} />
           </Section>
-          <Section title="Blogs">
-            <BlogList blogs={blogs} onDelete={removeBlog} />
-          </Section>
         </>
       ) : (
         <Section title="Log in">
           <LoginForm onSubmit={handleLogin} />
         </Section>
       )}
+      <Section title="Blogs">
+        <BlogList blogs={blogs} loggedUser={user} onDelete={removeBlog} />
+      </Section>
     </>
   );
 };

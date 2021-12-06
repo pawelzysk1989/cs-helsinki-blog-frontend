@@ -14,7 +14,7 @@ const getConfig = (): AxiosRequestConfig => {
 };
 
 const getAll = () => {
-  const request = axios.get<Blog[]>(baseUrl, getConfig());
+  const request = axios.get<Blog[]>(baseUrl);
   return request.then((response) => response.data);
 };
 
