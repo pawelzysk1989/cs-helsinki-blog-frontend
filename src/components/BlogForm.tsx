@@ -4,7 +4,7 @@ import { BlogFormState } from '../types/blog';
 import InputField from './InputField';
 
 type Props = {
-  onSubmit: (payload: BlogFormState, reset: () => void) => void;
+  onSubmit: (payload: BlogFormState) => void;
 };
 
 const BlogForm = ({ onSubmit }: Props) => {
@@ -21,13 +21,7 @@ const BlogForm = ({ onSubmit }: Props) => {
       url,
     };
 
-    const reset = () => {
-      setTitle('');
-      setAuthor('');
-      setUrl('');
-    };
-
-    onSubmit(loginForm, reset);
+    onSubmit(loginForm);
   };
 
   return (
