@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import BlogForm from './components/BlogForm';
 import BlogList from './components/BlogList';
@@ -96,6 +96,10 @@ const App = () => {
       handleError(error);
     }
   };
+  const sortedBlogs = useMemo(
+    () => [...blogs].sort((a, b) => b.likes - a.likes),
+    [blogs],
+  );
   return (
     <>
       {Boolean(notifications.length) && <Notifications notifications={notifications} />}
@@ -120,7 +124,7 @@ const App = () => {
       )}
       <Section title="Blogs">
         <BlogList
-          blogs={blogs}
+          blogs={sortedBlogs}
           loggedUser={user}
           onDelete={removeBlog}
           onLike={updateBlogLikes}
