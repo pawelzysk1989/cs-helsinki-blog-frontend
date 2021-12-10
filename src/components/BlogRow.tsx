@@ -9,15 +9,18 @@ type Props = {
   blog: Blog;
   loggedUser: User | Unset;
   onDelete: (blog: Blog) => void;
+  onLike: (blog: Blog) => void;
 };
 
-const BlogRow = ({ blog, loggedUser, onDelete }: Props) => {
+const BlogRow = ({ blog, loggedUser, onDelete, onLike }: Props) => {
   const notAuthorized = loggedUser?.id !== blog.user.id;
   return (
     <div className="blog-row">
       <Accordion title={`${blog.title} by ${blog.author}`}>
         <div>{blog.url}</div>
-        <div>{blog.likes}</div>
+        <div>
+          {blog.likes} <button onClick={() => onLike(blog)}>like</button>
+        </div>
         <div>{blog.user.name || blog.user.username}</div>
         <button disabled={notAuthorized} onClick={() => onDelete(blog)}>
           delete

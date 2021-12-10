@@ -85,6 +85,17 @@ const App = () => {
       }
     }
   };
+  const updateBlogLikes = async (blogToUpdate: Blog) => {
+    try {
+      const updatedBlog = await blogService.update({
+        ...blogToUpdate,
+        likes: blogToUpdate.likes + 1,
+      });
+      setBlogs(blogs.map((blog) => (blog.id === blogToUpdate.id ? updatedBlog : blog)));
+    } catch (error) {
+      handleError(error);
+    }
+  };
   return (
     <>
       {Boolean(notifications.length) && <Notifications notifications={notifications} />}
@@ -108,7 +119,12 @@ const App = () => {
         </Section>
       )}
       <Section title="Blogs">
-        <BlogList blogs={blogs} loggedUser={user} onDelete={removeBlog} />
+        <BlogList
+          blogs={blogs}
+          loggedUser={user}
+          onDelete={removeBlog}
+          onLike={updateBlogLikes}
+        />
       </Section>
     </>
   );

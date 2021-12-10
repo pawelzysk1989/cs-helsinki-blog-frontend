@@ -23,12 +23,8 @@ const create = async (newObject: BlogFormState) => {
   return response.data;
 };
 
-const update = async (newObject: Blog) => {
-  const response = await axios.put<Blog>(
-    `${baseUrl}/${newObject.id}`,
-    newObject,
-    getConfig(),
-  );
+const update = async ({ user, ...blog }: Blog) => {
+  const response = await axios.put<Blog>(`${baseUrl}/${blog.id}`, blog, getConfig());
   return response.data;
 };
 
