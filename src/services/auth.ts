@@ -27,4 +27,18 @@ const logout = () => {
   removeLoggedUser();
 };
 
-export default { login, logout, getLoggedUser, getToken };
+const securedApi = axios.create();
+
+securedApi.interceptors.request.use(
+  (config) => {
+    const token = getToken();
+    const headers = token ? { ...config.headers, Authorization: token } : {};
+    return {
+      ...config,
+      headers,
+    };
+  },
+  (error) => Promise.reject(error),
+);
+
+export default { login, logout, getLoggedUser, securedApi };
