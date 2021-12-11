@@ -7,25 +7,20 @@ import Notifications from './components/Notifications';
 import Section from './components/Section';
 import Togglable, { TogglableRef } from './components/Togglable';
 import UserInfo from './components/UserInfo';
+import useNotifications from './hooks/use_notifications';
 import authService from './services/auth';
 import blogService from './services/blogs';
 import { Blog, BlogFormState } from './types/blog';
-import { Notification } from './types/notification';
 import { isServerError } from './types/server_error';
-import { Unset } from './types/unset';
-import { Credentials, User } from './types/user';
+import { Credentials } from './types/user';
+import api from './utils/api';
 import isSet from './utils/is_set';
 
 const App = () => {
-  const [user, setUser] = useState<User | Unset>(authService.getLoggedUser);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [user, setUser] = useState(authService.getLoggedUser);
   const [blogs, setBlogs] = useState<Blog[]>([]);
-
+  const [notifications, addNotifiaction] = useNotifications();
   const blogToggleRef = useRef<TogglableRef>(null);
-
-  useEffect(() => {
-    blogService.getAll().then(setBlogs).catch(handleError);
-  }, []);
 
   const handleError = (error: unknown) => {
     const isErrorFromServer = isServerError(error);
@@ -41,29 +36,24 @@ const App = () => {
     });
   };
 
-  const handleLogin = async (loginFormState: Credentials) => {
-    try {
+  useEffect(() => {
+    blogService.getAll().then(setBlogs).catch(handleError);
+  }, []);
+
+  const handleRequest = api.handleRequest(handleError);
+
+  const login = (loginFormState: Credentials) =>
+    handleRequest(async () => {
       const user = await authService.login(loginFormState);
       setUser(user);
-    } catch (error) {
-      handleError(error);
-    }
-  };
-  const addNotifiaction = (newNotification: Notification) => {
-    setNotifications(notifications.concat(newNotification));
-    setTimeout(() => {
-      const clearedNotifications = notifications.filter(
-        ({ message }) => message !== newNotification.message,
-      );
-      setNotifications(clearedNotifications);
-    }, 5000);
-  };
+    });
+
   const logout = () => {
     setUser(null);
     authService.logout();
   };
-  const createBlog = async (blog: BlogFormState) => {
-    try {
+  const createBlog = async (blog: BlogFormState) =>
+    handleRequest(async () => {
       const newBlog = await blogService.create(blog);
       setBlogs((blogs) => blogs.concat(newBlog));
       addNotifiaction({
@@ -71,31 +61,25 @@ const App = () => {
         message: `A new blog '${newBlog.title}' by ${newBlog.author} added`,
       });
       blogToggleRef.current?.toggle();
-    } catch (error) {
-      handleError(error);
-    }
-  };
-  const removeBlog = async (blogToDelete: Blog) => {
-    if (window.confirm(`Delete ${blogToDelete.title}?`)) {
-      try {
+    });
+
+  const removeBlog = async (blogToDelete: Blog) =>
+    handleRequest(async () => {
+      if (window.confirm(`Delete ${blogToDelete.title}?`)) {
         await blogService.delete(blogToDelete);
         setBlogs(blogs.filter((blog) => blog.id !== blogToDelete.id));
-      } catch (error) {
-        handleError(error);
       }
-    }
-  };
-  const updateBlogLikes = async (blogToUpdate: Blog) => {
-    try {
+    });
+
+  const updateBlogLikes = async (blogToUpdate: Blog) =>
+    handleRequest(async () => {
       const updatedBlog = await blogService.update({
         ...blogToUpdate,
         likes: blogToUpdate.likes + 1,
       });
       setBlogs(blogs.map((blog) => (blog.id === blogToUpdate.id ? updatedBlog : blog)));
-    } catch (error) {
-      handleError(error);
-    }
-  };
+    });
+
   const sortedBlogs = useMemo(
     () => [...blogs].sort((a, b) => b.likes - a.likes),
     [blogs],
@@ -119,7 +103,7 @@ const App = () => {
         </>
       ) : (
         <Section title="Log in">
-          <LoginForm onSubmit={handleLogin} />
+          <LoginForm onSubmit={login} />
         </Section>
       )}
       <Section title="Blogs">
