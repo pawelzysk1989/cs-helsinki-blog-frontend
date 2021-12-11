@@ -1,8 +1,8 @@
 import axios, { AxiosError } from 'axios';
 
-export type ServerError = AxiosError<{
+export type ResponseError = AxiosError<{
   error: string;
 }>;
 
-export const isServerError = (error: unknown): error is ServerError =>
+export const isResponseError = (error: unknown): error is ResponseError =>
   axios.isAxiosError(error) && 'error' in error.response?.data;

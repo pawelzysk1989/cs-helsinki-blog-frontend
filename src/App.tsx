@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import BlogForm from './components/BlogForm';
@@ -11,9 +12,9 @@ import useNotifications from './hooks/use_notifications';
 import authService from './services/auth';
 import blogService from './services/blogs';
 import { Blog, BlogFormState } from './types/blog';
-import { isServerError } from './types/server_error';
 import { Credentials } from './types/user';
 import api from './utils/api';
+import errorUtils from './utils/error';
 import isSet from './utils/is_set';
 
 const App = () => {
@@ -23,16 +24,13 @@ const App = () => {
   const blogToggleRef = useRef<TogglableRef>(null);
 
   const handleError = (error: unknown) => {
-    const isErrorFromServer = isServerError(error);
-    if (isErrorFromServer && error.response?.status === 401) {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
       logout();
     }
 
     addNotifiaction({
       type: 'error',
-      message: isErrorFromServer
-        ? error.response?.data.error ?? error.message
-        : String(error),
+      message: errorUtils.extractMessage(error),
     });
   };
 
