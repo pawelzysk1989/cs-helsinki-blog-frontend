@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { isResponseError } from '../types/response_error';
+import { isResponseError } from '../types/server_error';
 
 const extractMessage = (error: unknown): string => {
   if (isResponseError(error)) {

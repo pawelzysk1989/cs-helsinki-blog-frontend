@@ -17,9 +17,14 @@ const BlogRow = ({ blog, loggedUser, onDelete, onLike }: Props) => {
   return (
     <div className="blog-row">
       <Accordion title={`${blog.title} by ${blog.author}`}>
-        <div>{blog.url}</div>
+        <a href={blog.url} rel="noreferrer" target="_blank">
+          link
+        </a>
         <div>
-          {blog.likes} <button onClick={() => onLike(blog)}>like</button>
+          <span className="likes">{blog.likes}</span>
+          <button className="like-button" onClick={() => onLike(blog)}>
+            like
+          </button>
         </div>
         <div>{blog.user.name || blog.user.username}</div>
         <button disabled={notAuthorized} onClick={() => onDelete(blog)}>

@@ -88,19 +88,19 @@ code {
 
 .accordion__content {
   overflow: hidden;
-  max-height: 50rem;
-  transition: max-height 1s ease-in-out;
-}
-
-.accordion__content[aria-expanded='true'] {
   max-height: 0;
   transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
 }
 
-.togglable__body {
-  display: block;
+.accordion__content[aria-expanded='true'] {
+  max-height: 50rem;
+  transition: max-height 1s ease-in-out;
 }
 
 .togglable__body[aria-expanded='true'] {
+  display: block;
+}
+
+.togglable__body {
   display: none;
 }

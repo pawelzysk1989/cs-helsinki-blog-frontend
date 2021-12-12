@@ -25,7 +25,7 @@ const Togglable = ({ buttonLabel, title, children }: Props, ref: Ref<TogglableRe
       <div className="togglable__title">
         {isVisible ? <h2>{title}</h2> : <button onClick={toggle}>{buttonLabel}</button>}
       </div>
-      <div className="togglable__body" aria-expanded={!isVisible}>
+      <div className="togglable__body" aria-expanded={isVisible}>
         {children}
         <button onClick={toggle}>cancel</button>
       </div>

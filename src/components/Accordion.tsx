@@ -19,7 +19,7 @@ const Accordion = ({ title, children }: Props) => {
       <div className="accordion__title" onClick={toggle}>
         <span>{title}</span>
       </div>
-      <div className="accordion__content" aria-expanded={!isOpen}>
+      <div className="accordion__content" aria-expanded={isOpen}>
         {children}
       </div>
     </div>
