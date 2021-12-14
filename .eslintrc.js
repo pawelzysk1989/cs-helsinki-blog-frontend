@@ -17,15 +17,17 @@ module.exports = {
     browser: true,
     amd: true,
     node: true,
-    jest: true,
+    'jest/globals': true,
+    'cypress/globals': true,
   },
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:jsx-a11y/recommended',
+    'plugin:cypress/recommended',
     'plugin:prettier/recommended', // Make sure this is always the last element in the array.
   ],
-  plugins: ['@typescript-eslint', 'simple-import-sort', 'prettier', 'jest'],
+  plugins: ['@typescript-eslint', 'simple-import-sort', 'prettier', 'jest', 'cypress'],
   rules: {
     'prettier/prettier': ['error', {}, { usePrettierrc: true }],
     'react/react-in-jsx-scope': 'off',
