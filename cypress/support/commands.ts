@@ -26,7 +26,7 @@
 
 import '@testing-library/cypress/add-commands';
 
-import { admin, Credentials, User } from '../types';
+import { admin, Blog, Credentials, User } from '../types';
 
 const adminCredentials: Credentials = {
   username: admin.username,
@@ -37,6 +37,7 @@ declare global {
   namespace Cypress {
     interface Chainable {
       createUser(user?: User): void;
+      createBlog(blog: Blog): void;
       login(credentials?: Credentials): void;
       resetDB(): void;
     }
@@ -49,6 +50,17 @@ Cypress.Commands.add('resetDB', () => {
 
 Cypress.Commands.add('createUser', (user = admin) => {
   cy.request('POST', 'http://localhost:3001/api/users', user);
+});
+
+Cypress.Commands.add('createBlog', (blog) => {
+  cy.request({
+    url: 'http://localhost:3001/api/blogs',
+    method: 'POST',
+    body: blog,
+    headers: {
+      Authorization: `bearer ${JSON.parse(localStorage.getItem('loggedUser')!).token}`,
+    },
+  });
 });
 
 Cypress.Commands.add('login', (credentials = adminCredentials) => {
