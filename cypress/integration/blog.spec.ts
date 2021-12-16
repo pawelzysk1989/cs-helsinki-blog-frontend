@@ -1,9 +1,36 @@
+import { Blog } from '../types';
+
+const examinedBlog: Blog = {
+  title: 'second blog',
+  author: 'second author',
+  url: 'second_url',
+  likes: 3,
+};
+
+const blogs: Blog[] = [
+  {
+    title: 'first blog',
+    author: 'first author',
+    url: 'first_url',
+    likes: 1,
+  },
+  examinedBlog,
+  {
+    title: 'third blog',
+    author: 'third author',
+    url: 'third_url',
+    likes: 2,
+  },
+];
+
+const expectedBlogTitle = `${examinedBlog.title} by ${examinedBlog.author}`;
+
 describe('Blog creation', function () {
   beforeEach(function () {
     cy.resetDB();
     cy.createUser();
   });
-  describe('when logged in', function () {
+  describe('when user is logged in', function () {
     beforeEach(function () {
       cy.login();
       cy.visit('');
@@ -21,40 +48,40 @@ describe('Blog creation', function () {
 
     describe('and several blogs exist', function () {
       beforeEach(function () {
-        cy.createBlog({
-          title: 'first blog',
-          author: 'first author',
-          url: 'first_url',
-        });
-        cy.createBlog({
-          title: 'second blog',
-          author: 'second author',
-          url: 'second_url',
+        blogs.forEach((blog) => {
+          cy.createBlog(blog);
         });
         cy.reload();
       });
-      it('then user can like a blog', function () {
-        cy.contains('second blog by second author')
-          .click()
-          .parents('.blog-row')
-          .as('blogElement');
 
-        cy.get('@blogElement').find('.likes').contains('0');
-
-        cy.get('@blogElement').contains('button', 'like').click();
-
-        cy.get('@blogElement').find('.likes').contains('1');
+      it('then blogs are sorted descending by likes', function () {
+        let prevLikes = Number.MAX_SAFE_INTEGER;
+        cy.get('.accordion__title').each(($title) => {
+          cy.wrap($title)
+            .click()
+            .parents('.blog-row')
+            .find('.likes')
+            .then(($likes) => {
+              const numberOfLikes = Number($likes.text());
+              expect(numberOfLikes).to.be.lte(prevLikes);
+              prevLikes = numberOfLikes;
+            });
+        });
       });
-      it('then user can delete a blog', function () {
-        cy.contains('second blog by second author')
-          .click()
-          .parents('.blog-row')
-          .as('blogElement');
+      describe('when user opens blog details', function () {
+        beforeEach(() => {
+          cy.contains(expectedBlogTitle).click().parents('.blog-row').as('blogElement');
+        });
 
-        cy.get('@blogElement').contains('button', 'delete').click();
+        it('then user can like a blog', function () {
+          cy.get('@blogElement').contains('button', 'like').click();
+          cy.get('@blogElement').find('.likes').contains('4');
+        });
+        it('then user can delete a blog', function () {
+          cy.get('@blogElement').contains('button', 'delete').click();
+          cy.contains(expectedBlogTitle).should('not.exist');
+        });
       });
     });
   });
 });
-
-export {};
