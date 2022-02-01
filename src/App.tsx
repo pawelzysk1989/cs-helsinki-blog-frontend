@@ -84,7 +84,7 @@ const App = () => {
   );
   return (
     <>
-      {Boolean(notifications.length) && <Notifications notifications={notifications} />}
+      <Notifications notifications={notifications} />
       {isSet(user) ? (
         <>
           <Section>

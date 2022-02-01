@@ -8,13 +8,13 @@ type Props = {
 };
 
 function Notifications({ notifications }: Props) {
-  return (
+  return notifications.length ? (
     <div className="notifications">
       {notifications.map((notification) => (
-        <Notification key={notification.message} notification={notification} />
+        <Notification key={notification.id} notification={notification} />
       ))}
     </div>
-  );
+  ) : null;
 }
 
 export default Notifications;
