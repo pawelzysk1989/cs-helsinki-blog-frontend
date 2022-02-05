@@ -9,4 +9,4 @@ export interface Blog {
   user: User;
 }
 
-export type BlogFormState = Omit<Blog, 'id' | 'likes' | 'user'>;
+export type BlogCandidate = Omit<Blog, 'id' | 'likes' | 'user'>;

@@ -1,31 +1,28 @@
 import React, { useState } from 'react';
 
-import { Credentials } from '../types/user';
+import useUser from '../hooks/use_user';
+import authService from '../services/auth';
 import InputField from './InputField';
 
-type Props = {
-  onSubmit: (payload: Credentials) => void;
-};
-
-const LoginForm = ({ onSubmit }: Props) => {
+const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const user = useUser();
 
-  const submit = (e: React.FormEvent<HTMLFormElement>) => {
+  const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const loginForm: Credentials = {
+    const loggedUser = await authService.login({
       username,
       password,
-    };
-
-    onSubmit(loginForm);
+    });
+    user.set(loggedUser);
   };
 
   const isDisabled = [username, password].some((val) => val === '');
 
   return (
-    <form className="form" onSubmit={submit}>
+    <form className="form" onSubmit={login}>
       <InputField label="username" value={username} onChange={setUsername} />
       <InputField
         label="password"

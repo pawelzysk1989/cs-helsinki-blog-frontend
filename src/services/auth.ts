@@ -5,7 +5,7 @@ import localStorage from './local_storage';
 
 const baseUrl = '/api/login';
 
-const storedLoggedUser = localStorage.storeItem<User>('loggedUser');
+const storedLoggedUser = localStorage.storeItem<User>('logged_user');
 
 const setLoggedUser = storedLoggedUser.set;
 const getLoggedUser = storedLoggedUser.get;
@@ -39,6 +39,16 @@ securedApi.interceptors.request.use(
     };
   },
   (error) => Promise.reject(error),
+);
+
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      logout();
+    }
+    return Promise.reject(error);
+  },
 );
 
 export default { login, logout, getLoggedUser, securedApi };

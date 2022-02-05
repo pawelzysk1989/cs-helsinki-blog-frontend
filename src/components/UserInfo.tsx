@@ -1,17 +1,20 @@
 import React from 'react';
 
-import { User } from '../types/user';
+import useUser from '../hooks/use_user';
+import authService from '../services/auth';
 
-type Props = {
-  user: User;
-  onLogout: () => void;
-};
+const UserInfo = () => {
+  const user = useUser();
 
-const UserInfo = ({ user, onLogout }: Props) => {
+  const logout = () => {
+    user.set(null);
+    authService.logout();
+  };
+
   return (
     <div>
-      <span>{user.name ?? user.username} logged in.</span>
-      <button onClick={onLogout}>logout</button>
+      <span>{user.value?.name ?? user.value?.username} logged in.</span>
+      <button onClick={logout}>logout</button>
     </div>
   );
 };

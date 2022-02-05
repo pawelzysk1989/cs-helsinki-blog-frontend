@@ -1,4 +1,4 @@
-import { Blog, BlogFormState } from '../types/blog';
+import { Blog, BlogCandidate } from '../types/blog';
 import authService from './auth';
 
 const baseUrl = '/api/blogs';
@@ -9,8 +9,8 @@ const getAll = () => {
   return request.then((response) => response.data);
 };
 
-const create = async (newObject: BlogFormState) => {
-  const response = await securedApi.post<Blog>(baseUrl, newObject);
+const create = async (candidate: BlogCandidate) => {
+  const response = await securedApi.post<Blog>(baseUrl, candidate);
   return response.data;
 };
 

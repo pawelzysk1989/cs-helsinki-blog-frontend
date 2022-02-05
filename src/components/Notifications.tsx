@@ -1,13 +1,11 @@
 import React from 'react';
 
-import { Notification as NotificationType } from '../types/notification';
+import useNotifications from '../hooks/use_notifications';
 import Notification from './Notification';
 
-type Props = {
-  notifications: NotificationType[];
-};
+function Notifications() {
+  const [notifications] = useNotifications();
 
-function Notifications({ notifications }: Props) {
   return notifications.length ? (
     <div className="notifications">
       {notifications.map((notification) => (

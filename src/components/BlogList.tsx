@@ -1,30 +1,36 @@
 import React from 'react';
 
+import useBlog from '../hooks/use_blogs';
+import useUser from '../hooks/use_user';
 import { Blog } from '../types/blog';
-import { Unset } from '../types/unset';
-import { User } from '../types/user';
 import BlogRow from './BlogRow';
 
-type Props = {
-  blogs: Blog[];
-  loggedUser: User | Unset;
-  onDelete: (blog: Blog) => void;
-  onLike: (blog: Blog) => void;
-};
+const BlogList = () => {
+  const user = useUser();
+  const blogs = useBlog.all();
+  const updateBlog = useBlog.update();
+  const deleteBlog = useBlog.remove();
 
-const BlogList = ({ blogs, loggedUser, onDelete, onLike }: Props) => (
-  <div className="list">
-    {blogs.map((blog) => (
-      <div key={blog.id} className="list-item">
-        <BlogRow
-          blog={blog}
-          loggedUser={loggedUser}
-          onDelete={onDelete}
-          onLike={onLike}
-        />
-      </div>
-    ))}
-  </div>
-);
+  const updateBlogLikes = (blog: Blog) => {
+    updateBlog({
+      ...blog,
+      likes: blog.likes + 1,
+    });
+  };
+  return (
+    <div className="list">
+      {blogs.map((blog) => (
+        <div key={blog.id} className="list-item">
+          <BlogRow
+            blog={blog}
+            loggedUser={user.value}
+            onDelete={deleteBlog}
+            onLike={updateBlogLikes}
+          />
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export default BlogList;

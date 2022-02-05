@@ -1,27 +1,23 @@
 import React, { useState } from 'react';
 
-import { BlogFormState } from '../types/blog';
+import useBlog from '../hooks/use_blogs';
 import InputField from './InputField';
 
-type Props = {
-  onSubmit: (payload: BlogFormState) => void;
-};
-
-const BlogForm = ({ onSubmit }: Props) => {
+const BlogForm = () => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
 
+  const createBlog = useBlog.create();
+
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const loginForm: BlogFormState = {
+    createBlog({
       title,
       author,
       url,
-    };
-
-    onSubmit(loginForm);
+    });
   };
 
   return (
