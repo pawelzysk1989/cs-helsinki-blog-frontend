@@ -3,7 +3,7 @@ import { atom } from 'jotai';
 import authService from '../services/auth';
 import { User } from '../types/user';
 
-const base = atom(authService.getLoggedUser());
+const base = atom(authService.storedLoggedUser.get());
 
 const value = atom((get) => get(base));
 

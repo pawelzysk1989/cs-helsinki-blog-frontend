@@ -7,11 +7,12 @@ import Notifications from './components/Notifications';
 import Section from './components/Section';
 import Togglable from './components/Togglable';
 import UserInfo from './components/UserInfo';
-import useUser from './hooks/use_user';
+import queryClient from './hoc/query_client';
+import auth from './hooks/use_auth';
 import isSet from './utils/is_set';
 
 const App = () => {
-  const { value: user } = useUser();
+  const user = auth.useUser();
 
   return (
     <>
@@ -39,4 +40,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default queryClient.withQueryClientProvider(App);

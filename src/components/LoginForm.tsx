@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
 
-import useUser from '../hooks/use_user';
-import authService from '../services/auth';
+import auth from '../hooks/use_auth';
 import InputField from './InputField';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const user = useUser();
+  const loginUser = auth.useLogin();
 
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const loggedUser = await authService.login({
+    loginUser({
       username,
       password,
     });
-    user.set(loggedUser);
   };
 
   const isDisabled = [username, password].some((val) => val === '');

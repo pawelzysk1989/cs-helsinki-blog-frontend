@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import useBlog from '../hooks/use_blogs';
+import useBlog from '../hooks/use_blog';
 import InputField from './InputField';
 
 const BlogForm = () => {

@@ -1,12 +1,12 @@
 import React from 'react';
 
-import useBlog from '../hooks/use_blogs';
-import useUser from '../hooks/use_user';
+import auth from '../hooks/use_auth';
+import useBlog from '../hooks/use_blog';
 import { Blog } from '../types/blog';
 import BlogRow from './BlogRow';
 
 const BlogList = () => {
-  const user = useUser();
+  const loggedUser = auth.useUser();
   const blogs = useBlog.all();
   const updateBlog = useBlog.update();
   const deleteBlog = useBlog.remove();
@@ -23,7 +23,7 @@ const BlogList = () => {
         <div key={blog.id} className="list-item">
           <BlogRow
             blog={blog}
-            loggedUser={user.value}
+            loggedUser={loggedUser}
             onDelete={deleteBlog}
             onLike={updateBlogLikes}
           />

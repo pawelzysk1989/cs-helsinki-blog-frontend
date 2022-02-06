@@ -7,24 +7,15 @@ const baseUrl = '/api/login';
 
 const storedLoggedUser = localStorage.storeItem<User>('logged_user');
 
-const setLoggedUser = storedLoggedUser.set;
-const getLoggedUser = storedLoggedUser.get;
-const removeLoggedUser = storedLoggedUser.remove;
-
 const getToken = () => {
-  const storedToken = getLoggedUser()?.token;
+  const storedToken = storedLoggedUser.get()?.token;
   return storedToken && `Bearer ${storedToken}`;
 };
 
 const login = async (credentials: Credentials) => {
   const response = await axios.post<User>(baseUrl, credentials);
-  const user = response.data;
-  setLoggedUser(user);
-  return user;
-};
-
-const logout = () => {
-  removeLoggedUser();
+  storedLoggedUser.set(response.data);
+  return response.data;
 };
 
 const securedApi = axios.create();
@@ -41,14 +32,13 @@ securedApi.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-axios.interceptors.response.use(
+securedApi.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (axios.isAxiosError(error) && error.response?.status === 401) {
-      logout();
-    }
-    return Promise.reject(error);
-  },
+  (error) => Promise.reject(error),
 );
 
-export default { login, logout, getLoggedUser, securedApi };
+export default {
+  login,
+  storedLoggedUser,
+  securedApi,
+};

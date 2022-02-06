@@ -23,7 +23,7 @@ const useNotifications = (duration = 5000) => {
     [duration],
   );
 
-  return [notifications, add] as const;
+  return { value: notifications, add };
 };
 
 export default useNotifications;
