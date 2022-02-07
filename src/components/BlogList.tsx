@@ -1,35 +1,24 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-import auth from '../hooks/use_auth';
 import useBlog from '../hooks/use_blog';
-import { Blog } from '../types/blog';
-import BlogRow from './BlogRow';
+import Section from './Section';
 
 const BlogList = () => {
-  const loggedUser = auth.useUser();
   const blogs = useBlog.all();
-  const updateBlog = useBlog.update();
-  const deleteBlog = useBlog.remove();
 
-  const updateBlogLikes = (blog: Blog) => {
-    updateBlog({
-      ...blog,
-      likes: blog.likes + 1,
-    });
-  };
   return (
-    <div className="list">
-      {blogs.map((blog) => (
-        <div key={blog.id} className="list-item">
-          <BlogRow
-            blog={blog}
-            loggedUser={loggedUser}
-            onDelete={deleteBlog}
-            onLike={updateBlogLikes}
-          />
-        </div>
-      ))}
-    </div>
+    <Section title="Blog list">
+      <ul className="list">
+        {blogs.map((blog) => (
+          <li key={blog.id} className="list-item">
+            <Link to={`/blogs/${blog.id}`}>
+              {blog.title} by {blog.author}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </Section>
   );
 };
 

@@ -4,7 +4,7 @@ import { fireEvent, render, RenderResult } from '@testing-library/react';
 import * as React from 'react';
 
 import { blog } from '../fixtures/blog';
-import BlogRow from './BlogRow';
+import BlogRow from './BlogDetails';
 
 describe('<BlogRow />', () => {
   let component: RenderResult;

@@ -7,10 +7,12 @@ const UserInfo = () => {
   const user = auth.useUser();
 
   if (user) {
-    <div>
-      <span>{user.name ?? user.username} logged in.</span>
-      <button onClick={logout}>logout</button>
-    </div>;
+    return (
+      <>
+        <span>{user.name ?? user.username} logged in.</span>
+        <button onClick={logout}>logout</button>
+      </>
+    );
   }
 
   return null;
