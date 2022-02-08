@@ -6,30 +6,33 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import App from './App';
-import BlogDetails from './components/BlogDetails';
-import BlogForm from './components/BlogForm';
-import BlogList from './components/BlogList';
-import LoginForm from './components/LoginForm';
 import { BlogContextParams } from './types/url_context';
+
+const BlogList = React.lazy(() => import('./components/BlogList'));
+const BlogForm = React.lazy(() => import('./components/BlogForm'));
+const BlogDetails = React.lazy(() => import('./components/BlogDetails'));
+const LoginForm = React.lazy(() => import('./components/LoginForm'));
 
 ReactDOM.render(
   <React.StrictMode>
     <JotaiProvider>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App />}>
-            <Route path="/login" element={<LoginForm />}></Route>
-            <Route index element={<Navigate to="/blogs" />} />
-            <Route path="blogs">
-              <Route index element={<BlogList />}></Route>
-              <Route path="create" element={<BlogForm />}></Route>
-              <Route
-                path={`:${BlogContextParams.blogId}`}
-                element={<BlogDetails />}></Route>
+        <React.Suspense fallback={<>...Loading</>}>
+          <Routes>
+            <Route path="/" element={<App />}>
+              <Route index element={<Navigate to="/blogs" />} />
+              <Route path="blogs">
+                <Route index element={<BlogList />}></Route>
+                <Route path="create" element={<BlogForm />}></Route>
+                <Route
+                  path={`:${BlogContextParams.blogId}`}
+                  element={<BlogDetails />}></Route>
+              </Route>
+              <Route path="/login" element={<LoginForm />}></Route>
+              <Route path="*" element={<Navigate to="/" />} />
             </Route>
-            <Route path="*" element={<Navigate to="/" />} />
-          </Route>
-        </Routes>
+          </Routes>
+        </React.Suspense>
       </BrowserRouter>
     </JotaiProvider>
   </React.StrictMode>,

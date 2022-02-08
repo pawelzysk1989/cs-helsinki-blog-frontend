@@ -31,4 +31,4 @@ function withQueryClientProvider<T>(WrappedComponent: React.ComponentType<T>) {
   return ComponentWithQueryClientProvider;
 }
 
-export default { withQueryClientProvider };
+export default withQueryClientProvider;

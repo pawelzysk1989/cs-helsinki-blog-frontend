@@ -1,6 +1,6 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
 
+import withAuthentication from '../hoc/auth';
 import auth from '../hooks/use_auth';
 import useBlog from '../hooks/use_blog';
 import useUrlParams from '../hooks/use_url_params';
@@ -10,10 +10,9 @@ import Section from './Section';
 const BlogDetails = () => {
   const { blogId } = useUrlParams('blog');
   const loggedUser = auth.useUser();
-  const blogs = useBlog.all();
+  const blog = useBlog.getById(blogId);
   const updateBlog = useBlog.update();
   const deleteBlog = useBlog.remove();
-  const blog = blogs.find(({ id }) => id === blogId);
 
   const updateBlogLikes = (blogToUpdate: Blog) => {
     updateBlog({
@@ -23,7 +22,7 @@ const BlogDetails = () => {
   };
 
   if (!blog) {
-    return <Navigate to="/blogs" />;
+    return null;
   }
 
   const notAuthorized = loggedUser?.id !== blog.user.id;
@@ -46,4 +45,4 @@ const BlogDetails = () => {
   );
 };
 
-export default BlogDetails;
+export default withAuthentication(BlogDetails);

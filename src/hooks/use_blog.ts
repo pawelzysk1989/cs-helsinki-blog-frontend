@@ -9,6 +9,11 @@ const useGetAll = () => {
   return getAllQuery.data ?? [];
 };
 
+const useGetById = (id: string) => {
+  const getByIdQuery = useBlogsQuery.getById(id);
+  return getByIdQuery.data;
+};
+
 const useCreate = () => {
   const createQuery = useBlogsQuery.create();
   const notifications = useNotifications();
@@ -65,6 +70,7 @@ const useRemove = () => {
 
 export default {
   all: useGetAll,
+  getById: useGetById,
   create: useCreate,
   update: useUpdate,
   remove: useRemove,

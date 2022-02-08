@@ -4,9 +4,14 @@ import authService from './auth';
 const baseUrl = '/api/blogs';
 const { securedApi } = authService;
 
-const getAll = () => {
-  const request = securedApi.get<Blog[]>(baseUrl);
-  return request.then((response) => response.data);
+const getAll = async () => {
+  const request = await securedApi.get<Blog[]>(baseUrl);
+  return request.data;
+};
+
+const getById = async (id: string) => {
+  const request = await securedApi.get<Blog>(`${baseUrl}/${id}`);
+  return request.data;
 };
 
 const create = async (candidate: BlogCandidate) => {
@@ -23,4 +28,4 @@ const remove = async (blog: Blog) => {
   await securedApi.delete(`${baseUrl}/${blog.id}`);
 };
 
-export default { getAll, create, update, delete: remove };
+export default { getAll, getById, create, update, delete: remove };

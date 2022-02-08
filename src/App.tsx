@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 
 import Navbar from './components/Navbar';
 import Notifications from './components/Notifications';
-import queryClient from './hoc/query_client';
+import withQueryClientProvider from './hoc/query_client';
 
 const App = () => {
   return (
@@ -15,4 +15,4 @@ const App = () => {
   );
 };
 
-export default queryClient.withQueryClientProvider(App);
+export default withQueryClientProvider(App);

@@ -5,8 +5,13 @@ import blogsService from '../services/blogs';
 const key = 'blogs_queries';
 
 const getAll = () => {
-  const getAll = useQuery(key, blogsService.getAll);
-  return getAll;
+  const getAllQuery = useQuery(key, blogsService.getAll);
+  return getAllQuery;
+};
+
+const getById = (id: string) => {
+  const get = useQuery([key, { id }], () => blogsService.getById(id));
+  return get;
 };
 
 const create = () => {
@@ -45,6 +50,7 @@ const remove = () => {
 
 export default {
   getAll,
+  getById,
   create,
   update,
   remove,

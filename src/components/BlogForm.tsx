@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import withAuthentication from '../hoc/auth';
 import useBlog from '../hooks/use_blog';
 import InputField from './InputField';
 import Section from './Section';
@@ -35,4 +36,4 @@ const BlogForm = () => {
   );
 };
 
-export default BlogForm;
+export default withAuthentication(BlogForm);

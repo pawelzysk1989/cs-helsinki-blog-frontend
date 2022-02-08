@@ -74,33 +74,15 @@ code {
   gap: 1rem;
 }
 
-.accordion {
-  padding: 1rem;
+.nav {
   display: flex;
-  flex-direction: column;
-  box-shadow: rgba(0, 0, 0, 0.15) 0.2rem 0.2rem 0.26rem;
+  padding: 1rem 1.6rem;
 }
 
-.accordion__title {
-  display: flex;
-  cursor: pointer;
+.nav__link + .nav__link {
+  margin-left: 0.8rem;
 }
 
-.accordion__content {
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
-}
-
-.accordion__content[aria-expanded='true'] {
-  max-height: 50rem;
-  transition: max-height 1s ease-in-out;
-}
-
-.togglable__body[aria-expanded='true'] {
-  display: block;
-}
-
-.togglable__body {
-  display: none;
+.nav__auth {
+  margin-left: auto;
 }
