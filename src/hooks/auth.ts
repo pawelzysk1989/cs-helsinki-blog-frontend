@@ -1,5 +1,6 @@
 import { useAtomValue, useUpdateAtom } from 'jotai/utils';
 import { useCallback } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import userAtoms from '../atoms/user';
 import authService from '../services/auth';
@@ -26,6 +27,10 @@ const useLogin = () => {
   const loginQuery = authQuery.useLogin();
   const notifications = useNotifications();
   const user = useUser();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const from = (location.state as { from?: Location })?.from?.pathname || '/';
 
   const login = useCallback(
     (credentials: Credentials) =>
@@ -36,6 +41,7 @@ const useLogin = () => {
             type: 'success',
             message: `${loggedUser.name ?? loggedUser.username} sucessfully logged in`,
           });
+          navigate(from, { replace: true });
         },
       }),
     [],

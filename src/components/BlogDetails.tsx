@@ -1,6 +1,6 @@
 import React from 'react';
 
-import withAuthentication from '../hoc/auth';
+import withAuthentication from '../hoc/with_auth';
 import auth from '../hooks/auth';
 import blog from '../hooks/blog';
 import useUrlParams from '../hooks/use_url_params';

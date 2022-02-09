@@ -18,22 +18,20 @@ ReactDOM.render(
   <React.StrictMode>
     <JotaiProvider>
       <BrowserRouter>
-        <React.Suspense fallback={<>...Loading</>}>
-          <Routes>
-            <Route path="/" element={<App />}>
-              <Route index element={<Home />} />
-              <Route path="blogs">
-                <Route index element={<BlogList />}></Route>
-                <Route path="create" element={<BlogForm />}></Route>
-                <Route
-                  path={`:${BlogContextParams.blogId}`}
-                  element={<BlogDetails />}></Route>
-              </Route>
-              <Route path="/login" element={<LoginForm />}></Route>
-              <Route path="*" element={<Navigate to="/" />} />
+        <Routes>
+          <Route path="/" element={<App />}>
+            <Route index element={<Home />} />
+            <Route path="blogs">
+              <Route index element={<BlogList />}></Route>
+              <Route path="create" element={<BlogForm />}></Route>
+              <Route
+                path={`:${BlogContextParams.blogId}`}
+                element={<BlogDetails />}></Route>
             </Route>
-          </Routes>
-        </React.Suspense>
+            <Route path="/login" element={<LoginForm />}></Route>
+            <Route path="*" element={<Navigate to="/" />} />
+          </Route>
+        </Routes>
       </BrowserRouter>
     </JotaiProvider>
   </React.StrictMode>,

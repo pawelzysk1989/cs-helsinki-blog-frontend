@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import withAuthentication from '../hoc/auth';
+import withAuthentication from '../hoc/with_auth';
 import blog from '../hooks/blog';
 import InputField from './InputField';
 import Section from './Section';
