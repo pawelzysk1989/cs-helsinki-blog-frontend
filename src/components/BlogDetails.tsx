@@ -1,8 +1,8 @@
 import React from 'react';
 
 import withAuthentication from '../hoc/auth';
-import auth from '../hooks/use_auth';
-import useBlog from '../hooks/use_blog';
+import auth from '../hooks/auth';
+import blog from '../hooks/blog';
 import useUrlParams from '../hooks/use_url_params';
 import { Blog } from '../types/blog';
 import Section from './Section';
@@ -10,9 +10,9 @@ import Section from './Section';
 const BlogDetails = () => {
   const { blogId } = useUrlParams('blog');
   const loggedUser = auth.useUser();
-  const blog = useBlog.getById(blogId);
-  const updateBlog = useBlog.update();
-  const deleteBlog = useBlog.remove();
+  const blogDetails = blog.useGetById(blogId);
+  const updateBlog = blog.useUpdate();
+  const deleteBlog = blog.useRemove();
 
   const updateBlogLikes = (blogToUpdate: Blog) => {
     updateBlog({
@@ -21,24 +21,24 @@ const BlogDetails = () => {
     });
   };
 
-  if (!blog) {
+  if (!blogDetails) {
     return null;
   }
 
-  const notAuthorized = loggedUser?.id !== blog.user.id;
+  const notAuthorized = loggedUser?.id !== blogDetails.user.id;
   return (
-    <Section title={`${blog.title} by ${blog.author}`}>
-      <a href={blog.url} rel="noreferrer" target="_blank">
+    <Section title={`${blogDetails.title} by ${blogDetails.author}`}>
+      <a href={blogDetails.url} rel="noreferrer" target="_blank">
         link
       </a>
       <div>
-        <span className="likes">{blog.likes}</span>
-        <button className="like-button" onClick={() => updateBlogLikes(blog)}>
+        <span className="likes">{blogDetails.likes}</span>
+        <button className="like-button" onClick={() => updateBlogLikes(blogDetails)}>
           like
         </button>
       </div>
-      <div>{blog.user.name || blog.user.username}</div>
-      <button disabled={notAuthorized} onClick={() => deleteBlog(blog)}>
+      <div>{blogDetails.user.name || blogDetails.user.username}</div>
+      <button disabled={notAuthorized} onClick={() => deleteBlog(blogDetails)}>
         delete
       </button>
     </Section>

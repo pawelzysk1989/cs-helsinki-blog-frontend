@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import auth from '../hooks/use_auth';
+import auth from '../hooks/auth';
 import isSet from '../utils/is_set';
 
 const Navbar = () => {
@@ -33,6 +33,9 @@ const Navbar = () => {
     <nav className="nav">
       <NavLink to="/" end className="nav__link">
         home
+      </NavLink>
+      <NavLink to="/blogs" end className="nav__link">
+        blogs
       </NavLink>
 
       <div className="nav__auth">

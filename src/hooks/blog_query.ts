@@ -1,20 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-import blogsService from '../services/blogs';
+import blogsService from '../services/blog';
 
-const key = 'blogs_queries';
+const key = 'blog_queries';
 
-const getAll = () => {
+const useGetAll = () => {
   const getAllQuery = useQuery(key, blogsService.getAll);
   return getAllQuery;
 };
 
-const getById = (id: string) => {
+const useGetById = (id: string) => {
   const get = useQuery([key, { id }], () => blogsService.getById(id));
   return get;
 };
 
-const create = () => {
+const useCreate = () => {
   const queryClient = useQueryClient();
 
   const create = useMutation(blogsService.create, {
@@ -26,7 +26,7 @@ const create = () => {
   return create;
 };
 
-const update = () => {
+const useUpdate = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation(blogsService.update, {
@@ -37,7 +37,7 @@ const update = () => {
   return mutation;
 };
 
-const remove = () => {
+const useRemove = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation(blogsService.delete, {
@@ -49,9 +49,9 @@ const remove = () => {
 };
 
 export default {
-  getAll,
-  getById,
-  create,
-  update,
-  remove,
+  useGetAll,
+  useGetById,
+  useCreate,
+  useUpdate,
+  useRemove,
 };

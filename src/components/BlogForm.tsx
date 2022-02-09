@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import withAuthentication from '../hoc/auth';
-import useBlog from '../hooks/use_blog';
+import blog from '../hooks/blog';
 import InputField from './InputField';
 import Section from './Section';
 
@@ -10,7 +10,7 @@ const BlogForm = () => {
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
 
-  const createBlog = useBlog.create();
+  const createBlog = blog.useCreate();
 
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

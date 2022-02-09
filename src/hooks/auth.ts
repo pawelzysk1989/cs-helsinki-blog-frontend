@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import userAtoms from '../atoms/user';
 import authService from '../services/auth';
 import { Credentials } from '../types/user';
-import useAuthQuery from './use_auth_query';
+import authQuery from './auth_query';
 import useNotifications from './use_notifications';
 
 const useUser = () => {
@@ -23,7 +23,7 @@ const useUserValue = () => {
 };
 
 const useLogin = () => {
-  const loginQuery = useAuthQuery.login();
+  const loginQuery = authQuery.useLogin();
   const notifications = useNotifications();
   const user = useUser();
 

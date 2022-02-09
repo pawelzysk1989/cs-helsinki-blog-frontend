@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import App from './App';
+import Home from './components/Home';
 import { BlogContextParams } from './types/url_context';
 
 const BlogList = React.lazy(() => import('./components/BlogList'));
@@ -20,7 +21,7 @@ ReactDOM.render(
         <React.Suspense fallback={<>...Loading</>}>
           <Routes>
             <Route path="/" element={<App />}>
-              <Route index element={<Navigate to="/blogs" />} />
+              <Route index element={<Home />} />
               <Route path="blogs">
                 <Route index element={<BlogList />}></Route>
                 <Route path="create" element={<BlogForm />}></Route>

@@ -1,25 +1,25 @@
 import { useCallback } from 'react';
 
 import { Blog, BlogCandidate } from '../types/blog';
-import useBlogsQuery from './use_blog_query';
+import blogQuery from './blog_query';
 import useNotifications from './use_notifications';
 
 const useGetAll = () => {
-  const getAllQuery = useBlogsQuery.getAll();
-  return getAllQuery.data ?? [];
+  const getAll = blogQuery.useGetAll();
+  return getAll.data ?? [];
 };
 
 const useGetById = (id: string) => {
-  const getByIdQuery = useBlogsQuery.getById(id);
-  return getByIdQuery.data;
+  const getById = blogQuery.useGetById(id);
+  return getById.data;
 };
 
 const useCreate = () => {
-  const createQuery = useBlogsQuery.create();
+  const createBlog = blogQuery.useCreate();
   const notifications = useNotifications();
 
   const create = useCallback((blogCandidate: BlogCandidate) => {
-    createQuery.mutate(blogCandidate, {
+    createBlog.mutate(blogCandidate, {
       onSuccess: () => {
         notifications.add({
           type: 'success',
@@ -33,11 +33,11 @@ const useCreate = () => {
 };
 
 const useUpdate = () => {
-  const updateQuery = useBlogsQuery.update();
+  const updateBlog = blogQuery.useUpdate();
   const notifications = useNotifications();
 
   const update = useCallback((blog: Blog) => {
-    updateQuery.mutate(blog, {
+    updateBlog.mutate(blog, {
       onSuccess: () => {
         notifications.add({
           type: 'success',
@@ -51,11 +51,11 @@ const useUpdate = () => {
 };
 
 const useRemove = () => {
-  const removeQuery = useBlogsQuery.remove();
+  const removeBlog = blogQuery.useRemove();
   const notifications = useNotifications();
 
   const update = useCallback((blog: Blog) => {
-    removeQuery.mutate(blog, {
+    removeBlog.mutate(blog, {
       onSuccess: () => {
         notifications.add({
           type: 'success',
@@ -69,9 +69,9 @@ const useRemove = () => {
 };
 
 export default {
-  all: useGetAll,
-  getById: useGetById,
-  create: useCreate,
-  update: useUpdate,
-  remove: useRemove,
+  useGetAll,
+  useGetById,
+  useCreate,
+  useUpdate,
+  useRemove,
 };

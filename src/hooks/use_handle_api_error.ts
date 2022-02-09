@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import errorUtils from '../utils/error';
-import auth from './use_auth';
+import auth from './auth';
 import useNotifications from './use_notifications';
 
 const useHandleApiError = () => {

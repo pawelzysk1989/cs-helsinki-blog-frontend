@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import useBlog from '../hooks/use_blog';
+import blog from '../hooks/blog';
 import Section from './Section';
 
 const BlogList = () => {
-  const blogs = useBlog.all();
+  const blogs = blog.useGetAll();
 
   return (
     <Section title="Blog list">

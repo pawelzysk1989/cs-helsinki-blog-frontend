@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
-import auth from '../hooks/use_auth';
+import auth from '../hooks/auth';
 import isSet from '../utils/is_set';
 
 function withAuthentication<T>(WrappedComponent: React.ComponentType<T>) {
