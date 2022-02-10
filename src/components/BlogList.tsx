@@ -8,7 +8,7 @@ const BlogList = () => {
   const blogs = blog.useGetAll();
 
   return (
-    <Section title="Blog list">
+    <Section title="Blogs">
       <ul className="list">
         {blogs.map((blog) => (
           <li key={blog.id} className="list-item">

@@ -13,6 +13,7 @@ const BlogList = React.lazy(() => import('./components/BlogList'));
 const BlogForm = React.lazy(() => import('./components/BlogForm'));
 const BlogDetails = React.lazy(() => import('./components/BlogDetails'));
 const LoginForm = React.lazy(() => import('./components/LoginForm'));
+const UserList = React.lazy(() => import('./components/UserList'));
 
 ReactDOM.render(
   <React.StrictMode>
@@ -28,6 +29,7 @@ ReactDOM.render(
                 path={`:${BlogContextParams.blogId}`}
                 element={<BlogDetails />}></Route>
             </Route>
+            <Route path="/users" element={<UserList />}></Route>
             <Route path="/login" element={<LoginForm />}></Route>
             <Route path="*" element={<Navigate to="/" />} />
           </Route>
