@@ -1,13 +1,13 @@
 import { atom } from 'jotai';
 
 import authService from '../services/auth';
-import { User } from '../types/user';
+import { LoggedUser } from '../types/user';
 
 const base = atom(authService.storedLoggedUser.get());
 
 const value = atom((get) => get(base));
 
-const set = atom(null, (_get, set, user: User | null) => {
+const set = atom(null, (_get, set, user: LoggedUser | null) => {
   set(base, user);
 });
 

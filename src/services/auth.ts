@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-import { Credentials, User } from '../types/user';
+import { Credentials, LoggedUser } from '../types/user';
 import localStorage from './local_storage';
 
 const baseUrl = '/api/login';
 
-const storedLoggedUser = localStorage.storeItem<User>('logged_user');
+const storedLoggedUser = localStorage.storeItem<LoggedUser>('logged_user');
 
 const getToken = () => {
   const storedToken = storedLoggedUser.get()?.token;
@@ -13,7 +13,7 @@ const getToken = () => {
 };
 
 const login = async (credentials: Credentials) => {
-  const response = await axios.post<User>(baseUrl, credentials);
+  const response = await axios.post<LoggedUser>(baseUrl, credentials);
   storedLoggedUser.set(response.data);
   return response.data;
 };

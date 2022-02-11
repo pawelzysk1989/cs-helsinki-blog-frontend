@@ -7,11 +7,12 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import App from './App';
 import Home from './components/Home';
-import { BlogContextParams } from './types/url_context';
+import { BlogContextParams, UserContextParams } from './types/url_context';
 
 const BlogList = React.lazy(() => import('./components/BlogList'));
 const BlogForm = React.lazy(() => import('./components/BlogForm'));
 const BlogDetails = React.lazy(() => import('./components/BlogDetails'));
+const UserDetails = React.lazy(() => import('./components/UserDetails'));
 const LoginForm = React.lazy(() => import('./components/LoginForm'));
 const UserList = React.lazy(() => import('./components/UserList'));
 
@@ -29,7 +30,12 @@ ReactDOM.render(
                 path={`:${BlogContextParams.blogId}`}
                 element={<BlogDetails />}></Route>
             </Route>
-            <Route path="/users" element={<UserList />}></Route>
+            <Route path="/users">
+              <Route index element={<UserList />} />
+              <Route
+                path={`:${UserContextParams.userId}`}
+                element={<UserDetails />}></Route>
+            </Route>
             <Route path="/login" element={<LoginForm />}></Route>
             <Route path="*" element={<Navigate to="/" />} />
           </Route>

@@ -5,7 +5,7 @@ const user: User = {
   id: 'some_user_id',
   username: 'some_username',
   name: 'some_name',
-  token: 'some_token',
+  blogs: [],
 };
 
 export const blog: Blog = {

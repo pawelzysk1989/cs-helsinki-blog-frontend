@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import withAuthentication from '../hoc/with_auth';
 import user from '../hooks/user';
@@ -9,13 +10,19 @@ const UserList = () => {
 
   return (
     <Section title="Users">
-      <ul className="list">
+      <div className="user-list">
+        <div className="user-list__header">
+          <span>name</span>
+          <span>blogs created</span>
+        </div>
+
         {users.map((user) => (
-          <li key={user.id} className="list-item">
-            {user.name ?? user.username}
-          </li>
+          <div key={user.id} className="user-list__item">
+            <Link to={`/users/${user.id}`}>{user.name ?? user.username}</Link>
+            <span>{user.blogs.length}</span>
+          </div>
         ))}
-      </ul>
+      </div>
     </Section>
   );
 };
