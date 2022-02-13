@@ -3,6 +3,7 @@ import React from 'react';
 import withAuthentication from '../hoc/with_auth';
 import useUrlParams from '../hooks/use_url_params';
 import user from '../hooks/user';
+import BlogList from './BlogList';
 import Section from './Section';
 
 const UserDetails = () => {
@@ -15,7 +16,8 @@ const UserDetails = () => {
 
   return (
     <Section title={`${userDetails.name ?? userDetails.username}`}>
-      {JSON.stringify(userDetails, null, 2)}
+      <h5>Blogs</h5>
+      <BlogList blogs={userDetails.blogs}></BlogList>
     </Section>
   );
 };

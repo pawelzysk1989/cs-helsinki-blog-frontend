@@ -9,7 +9,7 @@ import App from './App';
 import Home from './components/Home';
 import { BlogContextParams, UserContextParams } from './types/url_context';
 
-const BlogList = React.lazy(() => import('./components/BlogList'));
+const Blogs = React.lazy(() => import('./components/Blogs'));
 const BlogForm = React.lazy(() => import('./components/BlogForm'));
 const BlogDetails = React.lazy(() => import('./components/BlogDetails'));
 const UserDetails = React.lazy(() => import('./components/UserDetails'));
@@ -24,7 +24,7 @@ ReactDOM.render(
           <Route path="/" element={<App />}>
             <Route index element={<Home />} />
             <Route path="blogs">
-              <Route index element={<BlogList />}></Route>
+              <Route index element={<Blogs />}></Route>
               <Route path="create" element={<BlogForm />}></Route>
               <Route
                 path={`:${BlogContextParams.blogId}`}

@@ -1,24 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import blog from '../hooks/blog';
-import Section from './Section';
+import { Blog } from '../types/blog';
 
-const BlogList = () => {
-  const blogs = blog.useGetAll();
+type Props = {
+  blogs: Blog[];
+};
 
+const BlogList = ({ blogs }: Props) => {
   return (
-    <Section title="Blogs">
-      <ul className="list">
-        {blogs.map((blog) => (
-          <li key={blog.id} className="list-item">
-            <Link to={`/blogs/${blog.id}`}>
-              {blog.title} by {blog.author}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </Section>
+    <ul className="list">
+      {blogs.map((blog) => (
+        <li key={blog.id} className="list-item">
+          <Link to={`/blogs/${blog.id}`}>
+            {blog.title} by {blog.author}
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 };
 

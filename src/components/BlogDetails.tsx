@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import withAuthentication from '../hoc/with_auth';
 import auth from '../hooks/auth';
@@ -37,7 +38,11 @@ const BlogDetails = () => {
           like
         </button>
       </div>
-      <div>{blogDetails.user.name || blogDetails.user.username}</div>
+      <div>
+        <Link to={`/users/${blogDetails.user.id}`}>
+          {blogDetails.user.name || blogDetails.user.username}
+        </Link>
+      </div>
       <button disabled={notAuthorized} onClick={() => deleteBlog(blogDetails)}>
         delete
       </button>
