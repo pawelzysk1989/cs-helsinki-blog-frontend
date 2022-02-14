@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import { Blog, BlogCandidate } from '../types/blog';
 import authService from './auth';
 
@@ -5,7 +7,7 @@ const baseUrl = '/api/blogs';
 const { securedApi } = authService;
 
 const getAll = async () => {
-  const request = await securedApi.get<Blog[]>(baseUrl);
+  const request = await axios.get<Blog[]>(baseUrl);
   return request.data;
 };
 
@@ -28,4 +30,11 @@ const remove = async (blog: Blog) => {
   await securedApi.delete(`${baseUrl}/${blog.id}`);
 };
 
-export default { getAll, getById, create, update, delete: remove };
+const postComment = async ({ blog, text }: { blog: Blog; text: string }) => {
+  const response = await securedApi.post<Comment>(`${baseUrl}/${blog.id}/comment`, {
+    text,
+  });
+  return response.data;
+};
+
+export default { getAll, getById, create, update, delete: remove, postComment };

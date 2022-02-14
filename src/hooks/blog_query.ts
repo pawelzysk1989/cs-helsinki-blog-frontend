@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import blogsService from '../services/blog';
+import { Blog } from '../types/blog';
 
 const key = 'blog_queries';
 
@@ -48,10 +49,27 @@ const useRemove = () => {
   return mutation;
 };
 
+const usePostComment = () => {
+  const queryClient = useQueryClient();
+
+  const post = useMutation(
+    ({ blog, text }: { blog: Blog; text: string }) =>
+      blogsService.postComment({ blog, text }),
+    {
+      onSuccess: (_comment) => {
+        queryClient.invalidateQueries(key);
+      },
+    },
+  );
+
+  return post;
+};
+
 export default {
   useGetAll,
   useGetById,
   useCreate,
   useUpdate,
   useRemove,
+  usePostComment,
 };

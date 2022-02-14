@@ -68,10 +68,32 @@ const useRemove = () => {
   return update;
 };
 
+const usePostComment = () => {
+  const postComment = blogQuery.usePostComment();
+  const notifications = useNotifications();
+
+  const post = useCallback(({ blog, text }: { blog: Blog; text: string }) => {
+    postComment.mutate(
+      { blog, text },
+      {
+        onSuccess: () => {
+          notifications.add({
+            type: 'success',
+            message: `Commented on blog '${blog.title}' successfully`,
+          });
+        },
+      },
+    );
+  }, []);
+
+  return post;
+};
+
 export default {
   useGetAll,
   useGetById,
   useCreate,
   useUpdate,
   useRemove,
+  usePostComment,
 };

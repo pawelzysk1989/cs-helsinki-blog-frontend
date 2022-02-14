@@ -6,6 +6,8 @@ import auth from '../hooks/auth';
 import blog from '../hooks/blog';
 import useUrlParams from '../hooks/use_url_params';
 import { Blog } from '../types/blog';
+import CommentForm from './CommentForm';
+import Comments from './Comments';
 import Section from './Section';
 
 const BlogDetails = () => {
@@ -15,16 +17,16 @@ const BlogDetails = () => {
   const updateBlog = blog.useUpdate();
   const deleteBlog = blog.useRemove();
 
+  if (!blogDetails) {
+    return null;
+  }
+
   const updateBlogLikes = (blogToUpdate: Blog) => {
     updateBlog({
       ...blogToUpdate,
       likes: blogToUpdate.likes + 1,
     });
   };
-
-  if (!blogDetails) {
-    return null;
-  }
 
   const notAuthorized = loggedUser?.id !== blogDetails.user.id;
   return (
@@ -46,6 +48,10 @@ const BlogDetails = () => {
       <button disabled={notAuthorized} onClick={() => deleteBlog(blogDetails)}>
         delete
       </button>
+
+      {blogDetails.comments.length > 0 && <Comments comments={blogDetails.comments} />}
+
+      <CommentForm blog={blogDetails} />
     </Section>
   );
 };
