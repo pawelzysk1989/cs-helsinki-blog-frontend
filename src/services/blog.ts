@@ -21,7 +21,7 @@ const create = async (candidate: BlogCandidate) => {
   return response.data;
 };
 
-const update = async ({ user, ...blog }: Blog) => {
+const update = async ({ user, comments, ...blog }: Blog) => {
   const response = await securedApi.put<Blog>(`${baseUrl}/${blog.id}`, blog);
   return response.data;
 };
