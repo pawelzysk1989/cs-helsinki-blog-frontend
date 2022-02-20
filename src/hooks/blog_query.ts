@@ -43,7 +43,7 @@ const useRemove = () => {
 
   const mutation = useMutation(blogsService.delete, {
     onSuccess: () => {
-      queryClient.invalidateQueries(key);
+      queryClient.invalidateQueries(key, { exact: true });
     },
   });
   return mutation;

@@ -21,6 +21,12 @@ const BlogDetails = () => {
     return null;
   }
 
+  const handleDelete = () => {
+    if (window.confirm(`Delete ${blogDetails.title}?`)) {
+      deleteBlog(blogDetails);
+    }
+  };
+
   const updateBlogLikes = (blogToUpdate: Blog) => {
     updateBlog({
       ...blogToUpdate,
@@ -45,7 +51,7 @@ const BlogDetails = () => {
           {blogDetails.user.name || blogDetails.user.username}
         </Link>
       </div>
-      <button disabled={notAuthorized} onClick={() => deleteBlog(blogDetails)}>
+      <button disabled={notAuthorized} onClick={handleDelete}>
         delete
       </button>
 

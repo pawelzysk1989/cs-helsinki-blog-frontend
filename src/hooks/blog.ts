@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Blog, BlogCandidate } from '../types/blog';
 import blogQuery from './blog_query';
@@ -17,6 +18,7 @@ const useGetById = (id: string) => {
 const useCreate = () => {
   const createBlog = blogQuery.useCreate();
   const notifications = useNotifications();
+  const navigate = useNavigate();
 
   const create = useCallback((blogCandidate: BlogCandidate) => {
     createBlog.mutate(blogCandidate, {
@@ -25,6 +27,7 @@ const useCreate = () => {
           type: 'success',
           message: `A new blog '${blogCandidate.title}' by ${blogCandidate.author} added`,
         });
+        navigate('/blogs');
       },
     });
   }, []);
@@ -53,19 +56,21 @@ const useUpdate = () => {
 const useRemove = () => {
   const removeBlog = blogQuery.useRemove();
   const notifications = useNotifications();
+  const navigate = useNavigate();
 
-  const update = useCallback((blog: Blog) => {
+  const remove = useCallback((blog: Blog) => {
     removeBlog.mutate(blog, {
       onSuccess: () => {
         notifications.add({
           type: 'success',
           message: `A new blog '${blog.title}' by ${blog.author} removed`,
         });
+        navigate('/blogs');
       },
     });
   }, []);
 
-  return update;
+  return remove;
 };
 
 const usePostComment = () => {
