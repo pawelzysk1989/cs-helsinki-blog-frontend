@@ -1,14 +1,17 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import auth from '../hooks/auth';
 import isSet from '../utils/is_set';
 
 const Navbar = () => {
-  const logout = auth.useLogout();
-  const user = auth.useUser();
+  const { loginWithRedirect, logout, user, isAuthenticated, isLoading } = useAuth0();
 
-  if (isSet(user)) {
+  if (isLoading) {
+    return <div>Loading ...</div>;
+  }
+
+  if (isAuthenticated && isSet(user)) {
     return (
       <nav className="nav">
         <NavLink to="/" end className="nav__link">
@@ -25,8 +28,10 @@ const Navbar = () => {
         </NavLink>
 
         <div className="nav__auth">
-          <span>{user.name ?? user.username} logged in </span>
-          <button onClick={logout}>logout</button>
+          <span>{user.nickname ?? user.name ?? user.email} logged in </span>
+          <button onClick={() => logout({ returnTo: window.location.origin })}>
+            Log Out
+          </button>
         </div>
       </nav>
     );
@@ -42,9 +47,7 @@ const Navbar = () => {
       </NavLink>
 
       <div className="nav__auth">
-        <NavLink to="/login" className="nav__link">
-          login
-        </NavLink>
+        <button onClick={() => loginWithRedirect()}>Log In</button>
       </div>
     </nav>
   );

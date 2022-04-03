@@ -1,6 +1,6 @@
+import { withAuthenticationRequired } from '@auth0/auth0-react';
 import React from 'react';
 
-import withAuthentication from '../hoc/with_auth';
 import useUrlParams from '../hooks/use_url_params';
 import user from '../hooks/user';
 import BlogList from './BlogList';
@@ -22,4 +22,4 @@ const UserDetails = () => {
   );
 };
 
-export default withAuthentication(UserDetails);
+export default withAuthenticationRequired(UserDetails);

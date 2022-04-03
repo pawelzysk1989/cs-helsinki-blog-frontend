@@ -1,6 +1,6 @@
+import { withAuthenticationRequired } from '@auth0/auth0-react';
 import React, { useState } from 'react';
 
-import withAuthentication from '../hoc/with_auth';
 import blog from '../hooks/blog';
 import InputField from './InputField';
 import Section from './Section';
@@ -36,4 +36,4 @@ const BlogForm = () => {
   );
 };
 
-export default withAuthentication(BlogForm);
+export default withAuthenticationRequired(BlogForm);

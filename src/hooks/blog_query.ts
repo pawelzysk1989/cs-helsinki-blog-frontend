@@ -1,60 +1,113 @@
+import { useAuth0 } from '@auth0/auth0-react';
+import axios from 'axios';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-import blogsService from '../services/blog';
-import { Blog } from '../types/blog';
+import { Blog, BlogCandidate } from '../types/blog';
 
 const key = 'blog_queries';
+const baseUrl = '/api/blogs';
 
 const useGetAll = () => {
-  const getAllQuery = useQuery(key, blogsService.getAll);
-  return getAllQuery;
+  const query = useQuery(key, async () => {
+    const response = await axios.get<Blog[]>(baseUrl);
+    return response.data;
+  });
+  return query;
 };
 
 const useGetById = (id: string) => {
-  const get = useQuery([key, { id }], () => blogsService.getById(id));
-  return get;
+  const { getAccessTokenSilently } = useAuth0();
+  const query = useQuery([key, { id }], async () => {
+    const accessToken = await getAccessTokenSilently();
+    const response = await axios.get<Blog>(`${baseUrl}/${id}`, {
+      headers: { Authorization: `bearer ${accessToken}` },
+    });
+    return response.data;
+  });
+  return query;
 };
 
 const useCreate = () => {
   const queryClient = useQueryClient();
+  const { getAccessTokenSilently } = useAuth0();
 
-  const create = useMutation(blogsService.create, {
-    onSuccess: (_blogs) => {
-      queryClient.invalidateQueries(key);
+  const query = useMutation(
+    async (candidate: BlogCandidate) => {
+      const accessToken = await getAccessTokenSilently();
+      const response = await axios.post<Blog>(baseUrl, candidate, {
+        headers: { Authorization: `bearer ${accessToken}` },
+      });
+      return response.data;
     },
-  });
+    {
+      onSuccess: (_blogs) => {
+        queryClient.invalidateQueries(key);
+      },
+    },
+  );
 
-  return create;
+  return query;
 };
 
 const useUpdate = () => {
   const queryClient = useQueryClient();
+  const { getAccessTokenSilently } = useAuth0();
 
-  const mutation = useMutation(blogsService.update, {
-    onSuccess: (_blog) => {
-      queryClient.invalidateQueries(key);
+  const query = useMutation(
+    async ({ user, comments, ...blog }: Blog) => {
+      const accessToken = await getAccessTokenSilently();
+      const response = await axios.put<Blog>(`${baseUrl}/${blog.id}`, blog, {
+        headers: { Authorization: `bearer ${accessToken}` },
+      });
+      return response.data;
     },
-  });
-  return mutation;
+    {
+      onSuccess: (_blog) => {
+        queryClient.invalidateQueries(key);
+      },
+    },
+  );
+  return query;
 };
 
 const useRemove = () => {
   const queryClient = useQueryClient();
+  const { getAccessTokenSilently } = useAuth0();
 
-  const mutation = useMutation(blogsService.delete, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(key, { exact: true });
+  const query = useMutation(
+    async (blog: Blog) => {
+      const accessToken = await getAccessTokenSilently();
+      await axios.delete(`${baseUrl}/${blog.id}`, {
+        headers: { Authorization: `bearer ${accessToken}` },
+      });
     },
-  });
-  return mutation;
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(key, { exact: true });
+      },
+    },
+  );
+  return query;
 };
 
 const usePostComment = () => {
   const queryClient = useQueryClient();
+  const { getAccessTokenSilently } = useAuth0();
 
-  const post = useMutation(
-    ({ blog, text }: { blog: Blog; text: string }) =>
-      blogsService.postComment({ blog, text }),
+  const query = useMutation(
+    async ({ blog, text }: { blog: Blog; text: string }) => {
+      const accessToken = await getAccessTokenSilently();
+      const response = await axios.post<Comment>(
+        `${baseUrl}/${blog.id}/comment`,
+        {
+          text,
+        },
+        {
+          headers: { Authorization: `bearer ${accessToken}` },
+        },
+      );
+      return response.data;
+    },
     {
       onSuccess: (_comment) => {
         queryClient.invalidateQueries(key);
@@ -62,7 +115,7 @@ const usePostComment = () => {
     },
   );
 
-  return post;
+  return query;
 };
 
 export default {

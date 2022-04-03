@@ -2,9 +2,6 @@ import axios from 'axios';
 
 import { isResponseError } from '../types/server_error';
 
-const isNotAuthenticated = (error: unknown): boolean =>
-  axios.isAxiosError(error) && error.response?.status === 401;
-
 const extractMessage = (error: unknown): string => {
   if (isResponseError(error)) {
     return error.response?.data.error ?? error.message;
@@ -18,4 +15,4 @@ const extractMessage = (error: unknown): string => {
   return JSON.stringify(error);
 };
 
-export default { extractMessage, isNotAuthenticated };
+export default { extractMessage };

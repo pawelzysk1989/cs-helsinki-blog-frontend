@@ -15,4 +15,5 @@ export const blog: Blog = {
   url: 'some_url',
   likes: 5,
   user,
+  comments: [],
 };

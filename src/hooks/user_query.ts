@@ -1,33 +1,37 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useAuth0 } from '@auth0/auth0-react';
+import axios from 'axios';
+import { useQuery } from 'react-query';
 
-import userService from '../services/user';
+import { User } from '../types/user';
 
 const key = 'user_queries';
+const baseUrl = '/api/users';
 
 const useGetAll = () => {
-  const getAllQuery = useQuery(key, userService.getAll);
-  return getAllQuery;
+  const { getAccessTokenSilently } = useAuth0();
+  const query = useQuery(key, async () => {
+    const accessToken = await getAccessTokenSilently();
+    const response = await axios.get<User[]>(baseUrl, {
+      headers: { Authorization: `bearer ${accessToken}` },
+    });
+    return response.data;
+  });
+  return query;
 };
 
 const useGetById = (id: string) => {
-  const get = useQuery([key, { id }], () => userService.getById(id));
-  return get;
-};
-
-const useRegister = () => {
-  const queryClient = useQueryClient();
-
-  const register = useMutation(userService.register, {
-    onSuccess: (_user) => {
-      queryClient.invalidateQueries(key);
-    },
+  const { getAccessTokenSilently } = useAuth0();
+  const query = useQuery([key, { id }], async () => {
+    const accessToken = await getAccessTokenSilently();
+    const response = await axios.get<User>(`${baseUrl}/${id}`, {
+      headers: { Authorization: `bearer ${accessToken}` },
+    });
+    return response.data;
   });
-
-  return register;
+  return query;
 };
 
 export default {
   useGetAll,
   useGetById,
-  useRegister,
 };

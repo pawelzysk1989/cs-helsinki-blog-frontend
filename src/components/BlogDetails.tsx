@@ -1,8 +1,7 @@
+import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import withAuthentication from '../hoc/with_auth';
-import auth from '../hooks/auth';
 import blog from '../hooks/blog';
 import useUrlParams from '../hooks/use_url_params';
 import { Blog } from '../types/blog';
@@ -12,7 +11,7 @@ import Section from './Section';
 
 const BlogDetails = () => {
   const { blogId } = useUrlParams('blog');
-  const loggedUser = auth.useUser();
+  const { user } = useAuth0();
   const blogDetails = blog.useGetById(blogId);
   const updateBlog = blog.useUpdate();
   const deleteBlog = blog.useRemove();
@@ -34,7 +33,7 @@ const BlogDetails = () => {
     });
   };
 
-  const notAuthorized = loggedUser?.id !== blogDetails.user.id;
+  const notAuthorized = user?.sub !== blogDetails.user.id;
   return (
     <Section title={`${blogDetails.title} by ${blogDetails.author}`}>
       <a href={blogDetails.url} rel="noreferrer" target="_blank">
@@ -62,4 +61,4 @@ const BlogDetails = () => {
   );
 };
 
-export default withAuthentication(BlogDetails);
+export default withAuthenticationRequired(BlogDetails);

@@ -1,7 +1,7 @@
+import { withAuthenticationRequired } from '@auth0/auth0-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import withAuthentication from '../hoc/with_auth';
 import user from '../hooks/user';
 import Section from './Section';
 
@@ -27,4 +27,4 @@ const UserList = () => {
   );
 };
 
-export default withAuthentication(UserList);
+export default withAuthenticationRequired(UserList);
