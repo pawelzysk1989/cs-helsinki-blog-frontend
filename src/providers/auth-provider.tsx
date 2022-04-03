@@ -2,6 +2,8 @@ import { AppState, Auth0Provider } from '@auth0/auth0-react';
 import React, { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import envConfig from '../utils/env_config';
+
 const Auth0ProviderWithHistory = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -12,9 +14,9 @@ const Auth0ProviderWithHistory = ({ children }: { children: React.ReactNode }) =
 
   return (
     <Auth0Provider
-      domain="dev-ylszmrl7.us.auth0.com"
-      clientId="ICuysb9o15KnGcPmxC8UPyuojwt0rI5Q"
-      audience="blog_api"
+      domain={envConfig.AUTH_DOMAIN}
+      clientId={envConfig.AUTH_CLIENT_ID}
+      audience={envConfig.AUTH_AUDIENCE}
       redirectUri={window.location.origin}
       onRedirectCallback={onRedirectCallback}>
       {children}
