@@ -10,9 +10,11 @@
     "lint": "npm run lint:format && npm run lint:fix",
     "type-check": "tsc",
     "test": "jest ./src --verbose",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "generate": "graphql-codegen --config codegen.js"
   },
   "dependencies": {
+    "@apollo/client": "^3.5.10",
     "@auth0/auth0-react": "^1.9.0",
     "axios": "^0.24.0",
     "jotai": "^1.5.3",
@@ -22,6 +24,11 @@
     "react-router-dom": "^6.2.1"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^2.6.2",
+    "@graphql-codegen/introspection": "^2.1.1",
+    "@graphql-codegen/typescript": "^2.4.8",
+    "@graphql-codegen/typescript-operations": "^2.3.5",
+    "@graphql-codegen/typescript-react-apollo": "^3.2.11",
     "@testing-library/cypress": "^8.0.2",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",

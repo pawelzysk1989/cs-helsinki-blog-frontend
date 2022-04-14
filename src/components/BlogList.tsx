@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { Blog } from '../types/blog';
+import { FetchBlogsQuery } from '../generated/graphql';
 
 type Props = {
-  blogs: Blog[];
+  blogs: FetchBlogsQuery['blogs'];
 };
 
 const BlogList = ({ blogs }: Props) => {

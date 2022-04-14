@@ -7,6 +7,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import App from './App';
 import Home from './components/Home';
+import ApolloProvider from './providers/apollo_client';
 import Auth0ProviderWithHistory from './providers/auth';
 import ReactQueryClientProvider from './providers/query_client';
 import { BlogContextParams, UserContextParams } from './types/url_context';
@@ -23,25 +24,27 @@ ReactDOM.render(
       <ReactQueryClientProvider>
         <BrowserRouter>
           <Auth0ProviderWithHistory>
-            <Routes>
-              <Route path="/" element={<App />}>
-                <Route index element={<Home />} />
-                <Route path="blogs">
-                  <Route index element={<Blogs />}></Route>
-                  <Route path="create" element={<BlogForm />}></Route>
-                  <Route
-                    path={`:${BlogContextParams.blogId}`}
-                    element={<BlogDetails />}></Route>
+            <ApolloProvider>
+              <Routes>
+                <Route path="/" element={<App />}>
+                  <Route index element={<Home />} />
+                  <Route path="blogs">
+                    <Route index element={<Blogs />}></Route>
+                    <Route path="create" element={<BlogForm />}></Route>
+                    <Route
+                      path={`:${BlogContextParams.blogId}`}
+                      element={<BlogDetails />}></Route>
+                  </Route>
+                  <Route path="/users">
+                    <Route index element={<UserList />} />
+                    <Route
+                      path={`:${UserContextParams.userId}`}
+                      element={<UserDetails />}></Route>
+                  </Route>
+                  <Route path="*" element={<Navigate to="/" />} />
                 </Route>
-                <Route path="/users">
-                  <Route index element={<UserList />} />
-                  <Route
-                    path={`:${UserContextParams.userId}`}
-                    element={<UserDetails />}></Route>
-                </Route>
-                <Route path="*" element={<Navigate to="/" />} />
-              </Route>
-            </Routes>
+              </Routes>
+            </ApolloProvider>
           </Auth0ProviderWithHistory>
         </BrowserRouter>
       </ReactQueryClientProvider>
