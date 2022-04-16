@@ -4,10 +4,11 @@ import {
   HttpLink,
   InMemoryCache,
 } from '@apollo/client';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import useAccessToken from '../hooks/use_access_token';
 import { Unset } from '../types/unset';
+import envConfig from '../utils/env_config';
 import isSet from '../utils/is_set';
 
 const createApolloClient = (authToken: string | Unset) => {
@@ -18,18 +19,24 @@ const createApolloClient = (authToken: string | Unset) => {
     : {};
   return new ApolloClient({
     link: new HttpLink({
-      uri: 'https://quiet-sunfish-58.hasura.app/v1/graphql',
+      uri: envConfig.GRAPH_QL_URL,
       headers: {
         ...withAuth,
       },
     }),
     cache: new InMemoryCache(),
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: 'cache-and-network',
+        errorPolicy: 'all',
+      },
+    },
   });
 };
 
 const ApolloProvider = ({ children }: { children: React.ReactNode }) => {
   const accessToken = useAccessToken();
-  const client = createApolloClient(accessToken.value);
+  const client = useMemo(() => createApolloClient(accessToken.value), [accessToken]);
 
   return <Provider client={client}>{children}</Provider>;
 };

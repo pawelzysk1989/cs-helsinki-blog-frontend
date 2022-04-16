@@ -1,7 +1,7 @@
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 import React, { useState } from 'react';
 
-import blog from '../hooks/blog';
+import { useInsertBlogMutation } from '../generated/graphql';
 import InputField from './InputField';
 import Section from './Section';
 
@@ -10,15 +10,17 @@ const BlogForm = () => {
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
 
-  const createBlog = blog.useCreate();
+  const [createBlog] = useInsertBlogMutation();
 
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     createBlog({
-      title,
-      author,
-      url,
+      variables: {
+        title,
+        author,
+        url,
+      },
     });
   };
 

@@ -1,30 +1,14 @@
-import { gql, useQuery } from '@apollo/client';
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { FetchUsersQuery } from '../generated/graphql';
+import { useFetchUsersQuery } from '../generated/graphql';
 import Section from './Section';
 
-const FETCH_USERS_QUERY = gql`
-  query FetchUsers {
-    users(order_by: { created_at: desc }) {
-      id
-      name
-      created_at
-      blogs_aggregate {
-        aggregate {
-          count
-        }
-      }
-    }
-  }
-`;
-
 const UserList = () => {
-  const { data, loading } = useQuery<FetchUsersQuery>(FETCH_USERS_QUERY);
+  const { data, loading } = useFetchUsersQuery();
 
-  if (loading) {
+  if (loading && !data) {
     return <div>Loading...</div>;
   }
 

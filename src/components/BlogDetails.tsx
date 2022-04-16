@@ -2,61 +2,83 @@ import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import blog from '../hooks/blog';
+import {
+  useDeleteBlogMutation,
+  useFetchBlogDetailsQuery,
+  useUpvoteBlogMutation,
+} from '../generated/graphql';
 import useUrlParams from '../hooks/use_url_params';
-import { Blog } from '../types/blog';
-import CommentForm from './CommentForm';
-import Comments from './Comments';
+import isSet from '../utils/is_set';
+// import CommentForm from './CommentForm';
+// import Comments from './Comments';
 import Section from './Section';
 
 const BlogDetails = () => {
   const { blogId } = useUrlParams('blog');
   const { user } = useAuth0();
-  const blogDetails = blog.useGetById(blogId);
-  const updateBlog = blog.useUpdate();
-  const deleteBlog = blog.useRemove();
+  const { data, loading, refetch } = useFetchBlogDetailsQuery({
+    variables: {
+      id: blogId,
+    },
+  });
+  const [upvoteBlog] = useUpvoteBlogMutation({
+    onCompleted: (result) => {
+      if (isSet(result.update_blogs_by_pk?.id)) {
+        refetch();
+      }
+    },
+  });
+  const [deleteBlog] = useDeleteBlogMutation();
+  if (loading && !data) {
+    return <div>Loading...</div>;
+  }
 
-  if (!blogDetails) {
+  const blog = data?.blogs_by_pk;
+
+  if (!blog) {
     return null;
   }
 
   const handleDelete = () => {
-    if (window.confirm(`Delete ${blogDetails.title}?`)) {
-      deleteBlog(blogDetails);
+    if (window.confirm(`Delete ${blog.title}?`)) {
+      deleteBlog({
+        variables: {
+          id: blog.id,
+        },
+      });
     }
   };
 
-  const updateBlogLikes = (blogToUpdate: Blog) => {
-    updateBlog({
-      ...blogToUpdate,
-      likes: blogToUpdate.likes + 1,
+  const updateBlogLikes = () => {
+    upvoteBlog({
+      variables: {
+        id: blog.id,
+      },
     });
   };
 
-  const notAuthorized = user?.sub !== blogDetails.user.id;
+  const notAuthorized = user?.sub !== blog.user.id;
   return (
-    <Section title={`${blogDetails.title} by ${blogDetails.author}`}>
-      <a href={blogDetails.url} rel="noreferrer" target="_blank">
+    <Section title={`${blog.title} by ${blog.author}`}>
+      <a href={blog.url} rel="noreferrer" target="_blank">
         link
       </a>
       <div>
-        <span className="likes">{blogDetails.likes}</span>
-        <button className="like-button" onClick={() => updateBlogLikes(blogDetails)}>
+        <span className="likes">{blog.likes}</span>
+        <button className="like-button" onClick={updateBlogLikes}>
           like
         </button>
       </div>
       <div>
-        <Link to={`/users/${blogDetails.user.id}`}>
-          {blogDetails.user.name || blogDetails.user.username}
-        </Link>
+        <Link to={`/users/${blog.user.id}`}>{blog.user.name}</Link>
       </div>
       <button disabled={notAuthorized} onClick={handleDelete}>
         delete
       </button>
-
+      {/* 
       {blogDetails.comments.length > 0 && <Comments comments={blogDetails.comments} />}
 
-      <CommentForm blog={blogDetails} />
+      <CommentForm blog={blogDetails} /> */}
     </Section>
   );
 };
