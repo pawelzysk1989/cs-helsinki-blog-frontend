@@ -9,7 +9,6 @@ import App from './App';
 import Home from './components/Home';
 import ApolloProvider from './providers/apollo_client';
 import Auth0ProviderWithHistory from './providers/auth';
-import ReactQueryClientProvider from './providers/query_client';
 import { BlogContextParams, UserContextParams } from './types/url_context';
 
 const Blogs = React.lazy(() => import('./components/Blogs'));
@@ -21,33 +20,31 @@ const UserList = React.lazy(() => import('./components/UserList'));
 ReactDOM.render(
   <React.StrictMode>
     <JotaiProvider>
-      <ReactQueryClientProvider>
-        <BrowserRouter>
-          <Auth0ProviderWithHistory>
-            <ApolloProvider>
-              <Routes>
-                <Route path="/" element={<App />}>
-                  <Route index element={<Home />} />
-                  <Route path="blogs">
-                    <Route index element={<Blogs />}></Route>
-                    <Route path="create" element={<BlogForm />}></Route>
-                    <Route
-                      path={`:${BlogContextParams.blogId}`}
-                      element={<BlogDetails />}></Route>
-                  </Route>
-                  <Route path="/users">
-                    <Route index element={<UserList />} />
-                    <Route
-                      path={`:${UserContextParams.userId}`}
-                      element={<UserDetails />}></Route>
-                  </Route>
-                  <Route path="*" element={<Navigate to="/" />} />
+      <BrowserRouter>
+        <Auth0ProviderWithHistory>
+          <ApolloProvider>
+            <Routes>
+              <Route path="/" element={<App />}>
+                <Route index element={<Home />} />
+                <Route path="blogs">
+                  <Route index element={<Blogs />}></Route>
+                  <Route path="create" element={<BlogForm />}></Route>
+                  <Route
+                    path={`:${BlogContextParams.blogId}`}
+                    element={<BlogDetails />}></Route>
                 </Route>
-              </Routes>
-            </ApolloProvider>
-          </Auth0ProviderWithHistory>
-        </BrowserRouter>
-      </ReactQueryClientProvider>
+                <Route path="/users">
+                  <Route index element={<UserList />} />
+                  <Route
+                    path={`:${UserContextParams.userId}`}
+                    element={<UserDetails />}></Route>
+                </Route>
+                <Route path="*" element={<Navigate to="/" />} />
+              </Route>
+            </Routes>
+          </ApolloProvider>
+        </Auth0ProviderWithHistory>
+      </BrowserRouter>
     </JotaiProvider>
   </React.StrictMode>,
   document.getElementById('root'),

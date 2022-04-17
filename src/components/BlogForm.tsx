@@ -1,11 +1,16 @@
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { useInsertBlogMutation } from '../generated/graphql';
+import useNotifications from '../hooks/use_notifications';
 import InputField from './InputField';
 import Section from './Section';
 
 const BlogForm = () => {
+  const notifications = useNotifications();
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
@@ -20,6 +25,13 @@ const BlogForm = () => {
         title,
         author,
         url,
+      },
+      onCompleted() {
+        notifications.add({
+          type: 'success',
+          message: `A new blog '${title}' by ${author} added`,
+        });
+        navigate('/blogs');
       },
     });
   };

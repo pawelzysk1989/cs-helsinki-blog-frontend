@@ -14,3 +14,25 @@ export const FETCH_USERS_QUERY = gql`
     }
   }
 `;
+
+export const FETCH_USER_BY_ID_QUERY = gql`
+  query FetchUserById($user_id: String!) {
+    users_by_pk(id: $user_id) {
+      id
+      name
+      created_at
+      blogs(order_by: { created_at: desc }) {
+        id
+        likes
+        title
+        user {
+          id
+          created_at
+          name
+        }
+        created_at
+        author
+      }
+    }
+  }
+`;

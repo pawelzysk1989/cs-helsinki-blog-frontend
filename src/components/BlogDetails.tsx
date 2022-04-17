@@ -1,19 +1,22 @@
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
   useDeleteBlogMutation,
   useFetchBlogDetailsQuery,
   useUpvoteBlogMutation,
 } from '../generated/graphql';
+import useNotifications from '../hooks/use_notifications';
 import useUrlParams from '../hooks/use_url_params';
-import isSet from '../utils/is_set';
 // import CommentForm from './CommentForm';
 // import Comments from './Comments';
 import Section from './Section';
 
 const BlogDetails = () => {
+  const notifications = useNotifications();
+  const navigate = useNavigate();
+
   const { blogId } = useUrlParams('blog');
   const { user } = useAuth0();
   const { data, loading, refetch } = useFetchBlogDetailsQuery({
@@ -21,14 +24,9 @@ const BlogDetails = () => {
       id: blogId,
     },
   });
-  const [upvoteBlog] = useUpvoteBlogMutation({
-    onCompleted: (result) => {
-      if (isSet(result.update_blogs_by_pk?.id)) {
-        refetch();
-      }
-    },
-  });
+  const [upvoteBlog, { loading: isUpvoting }] = useUpvoteBlogMutation();
   const [deleteBlog] = useDeleteBlogMutation();
+
   if (loading && !data) {
     return <div>Loading...</div>;
   }
@@ -45,6 +43,13 @@ const BlogDetails = () => {
         variables: {
           id: blog.id,
         },
+        onCompleted() {
+          notifications.add({
+            type: 'success',
+            message: `A new blog '${blog.title}' by ${blog.author} removed`,
+          });
+          navigate('/blogs');
+        },
       });
     }
   };
@@ -53,6 +58,9 @@ const BlogDetails = () => {
     upvoteBlog({
       variables: {
         id: blog.id,
+      },
+      onCompleted() {
+        refetch();
       },
     });
   };
@@ -65,7 +73,7 @@ const BlogDetails = () => {
       </a>
       <div>
         <span className="likes">{blog.likes}</span>
-        <button className="like-button" onClick={updateBlogLikes}>
+        <button className="like-button" disabled={isUpvoting} onClick={updateBlogLikes}>
           like
         </button>
       </div>

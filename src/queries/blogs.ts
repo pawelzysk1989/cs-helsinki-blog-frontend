@@ -3,9 +3,9 @@ import { gql } from '@apollo/client';
 export const FETCH_BLOGS_QUERY = gql`
   query FetchBlogs {
     blogs(order_by: { created_at: desc }) {
+      id
       author
       created_at
-      id
       likes
       title
       user {
@@ -27,9 +27,9 @@ export const INSERT_BLOG_MUTATION = gql`
 export const FETCH_BLOG_DETAILS_QUERY = gql`
   query FetchBlogDetails($id: String = "") {
     blogs_by_pk(id: $id) {
+      id
       author
       created_at
-      id
       likes
       title
       url
