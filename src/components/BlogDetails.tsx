@@ -9,8 +9,8 @@ import {
 } from '../generated/graphql';
 import useNotifications from '../hooks/use_notifications';
 import useUrlParams from '../hooks/use_url_params';
-// import CommentForm from './CommentForm';
-// import Comments from './Comments';
+import CommentForm from './CommentForm';
+import Comments from './Comments';
 import Section from './Section';
 
 const BlogDetails = () => {
@@ -19,7 +19,11 @@ const BlogDetails = () => {
 
   const { blogId } = useUrlParams('blog');
   const { user } = useAuth0();
-  const { data, loading, refetch } = useFetchBlogDetailsQuery({
+  const {
+    data,
+    loading: isBlogLoading,
+    refetch,
+  } = useFetchBlogDetailsQuery({
     variables: {
       id: blogId,
     },
@@ -27,7 +31,7 @@ const BlogDetails = () => {
   const [upvoteBlog, { loading: isUpvoting }] = useUpvoteBlogMutation();
   const [deleteBlog] = useDeleteBlogMutation();
 
-  if (loading && !data) {
+  if (isBlogLoading && !data) {
     return <div>Loading...</div>;
   }
 
@@ -73,7 +77,10 @@ const BlogDetails = () => {
       </a>
       <div>
         <span className="likes">{blog.likes}</span>
-        <button className="like-button" disabled={isUpvoting} onClick={updateBlogLikes}>
+        <button
+          className="like-button"
+          disabled={isUpvoting || isBlogLoading}
+          onClick={updateBlogLikes}>
           like
         </button>
       </div>
@@ -83,10 +90,10 @@ const BlogDetails = () => {
       <button disabled={notAuthorized} onClick={handleDelete}>
         delete
       </button>
-      {/* 
-      {blogDetails.comments.length > 0 && <Comments comments={blogDetails.comments} />}
 
-      <CommentForm blog={blogDetails} /> */}
+      {blog.comments.length > 0 && <Comments comments={blog.comments} />}
+
+      <CommentForm />
     </Section>
   );
 };

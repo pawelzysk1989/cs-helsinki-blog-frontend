@@ -1,14 +1,11 @@
-import { Blog } from '../types/blog';
-import { User } from '../types/user';
-
-const user: User = {
+const user = {
   id: 'some_user_id',
   username: 'some_username',
   name: 'some_name',
   blogs: [],
 };
 
-export const blog: Blog = {
+export const blog = {
   id: 'some_blog_id',
   title: 'Dziady',
   author: 'Adam Mickewicz',

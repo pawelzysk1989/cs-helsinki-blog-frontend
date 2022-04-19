@@ -25,7 +25,7 @@ export const INSERT_BLOG_MUTATION = gql`
 `;
 
 export const FETCH_BLOG_DETAILS_QUERY = gql`
-  query FetchBlogDetails($id: String = "") {
+  query FetchBlogDetails($id: String!) {
     blogs_by_pk(id: $id) {
       id
       author
@@ -36,6 +36,18 @@ export const FETCH_BLOG_DETAILS_QUERY = gql`
       user {
         id
         name
+      }
+      comments(order_by: { created_at: asc }) {
+        id
+        content
+        created_at
+        user {
+          id
+          name
+        }
+        blog {
+          user_id
+        }
       }
     }
   }

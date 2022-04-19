@@ -1,23 +1,29 @@
 import React, { useState } from 'react';
 
-import blog from '../hooks/blog';
-import { Blog } from '../types/blog';
+import {
+  useFetchBlogDetailsLazyQuery,
+  usePostBlogCommentMutation,
+} from '../generated/graphql';
+import useUrlParams from '../hooks/use_url_params';
 import Section from './Section';
 
-type Props = {
-  blog: Blog;
-};
-
-const CommentForm = ({ blog: blogDetails }: Props) => {
+const CommentForm = () => {
+  const { blogId } = useUrlParams('blog');
   const [comment, setComment] = useState('');
-  const postComment = blog.usePostComment();
+  const [postComment] = usePostBlogCommentMutation();
+  const [fetchDetails] = useFetchBlogDetailsLazyQuery();
 
   const handleComment = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     postComment({
-      blog: blogDetails,
-      text: comment,
+      variables: {
+        blogId,
+        content: comment,
+      },
+    });
+    fetchDetails({
+      variables: { id: blogId },
     });
   };
 
