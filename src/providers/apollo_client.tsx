@@ -6,9 +6,9 @@ import {
   InMemoryCache,
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
-import React, { useMemo } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
+import React, { useEffect, useMemo, useState } from 'react';
 
-import useAccessToken from '../hooks/use_access_token';
 import { Unset } from '../types/unset';
 import envConfig from '../utils/env_config';
 import isSet from '../utils/is_set';
@@ -51,8 +51,19 @@ const createApolloClient = (authToken: string | Unset) => {
 };
 
 const ApolloProvider = ({ children }: { children: React.ReactNode }) => {
-  const accessToken = useAccessToken();
-  const client = useMemo(() => createApolloClient(accessToken.value), [accessToken]);
+  const { getAccessTokenSilently, isLoading, isAuthenticated } = useAuth0();
+  const [accessToken, setAccessToken] = useState<string | Unset>();
+
+  useEffect(() => {
+    const getAccessToken = async () => await getAccessTokenSilently();
+    getAccessToken().then(setAccessToken).catch(console.error);
+  }, [getAccessTokenSilently]);
+
+  const client = useMemo(() => createApolloClient(accessToken), [accessToken]);
+
+  if (isLoading || (isAuthenticated && !accessToken)) {
+    return <div>Loading...</div>;
+  }
 
   return <Provider client={client}>{children}</Provider>;
 };

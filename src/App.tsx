@@ -9,7 +9,7 @@ const App = () => {
     <>
       <Notifications />
       <Navbar />
-      <React.Suspense fallback={<>...Loading</>}>
+      <React.Suspense fallback={<>Loading...</>}>
         <Outlet />
       </React.Suspense>
     </>
