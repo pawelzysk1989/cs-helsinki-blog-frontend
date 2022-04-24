@@ -61,7 +61,7 @@ const BlogDetails = () => {
   const updateBlogLikes = () => {
     upvoteBlog({
       variables: {
-        id: blog.id,
+        blog_id: blog.id,
       },
       onCompleted() {
         refetch();
@@ -76,7 +76,7 @@ const BlogDetails = () => {
         link
       </a>
       <div>
-        <span className="likes">{blog.likes}</span>
+        <span className="likes">{blog.likes_aggregate.aggregate?.count}</span>
         <button
           className="like-button"
           disabled={isUpvoting || isBlogLoading}

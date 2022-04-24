@@ -23,7 +23,11 @@ export const FETCH_USER_BY_ID_QUERY = gql`
       created_at
       blogs(order_by: { created_at: desc }) {
         id
-        likes
+        likes_aggregate {
+          aggregate {
+            count
+          }
+        }
         title
         user {
           id

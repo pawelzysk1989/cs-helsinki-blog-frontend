@@ -6,11 +6,15 @@ export const FETCH_BLOGS_QUERY = gql`
       id
       author
       created_at
-      likes
       title
       user {
         id
         name
+      }
+      likes_aggregate {
+        aggregate {
+          count
+        }
       }
     }
   }
@@ -30,7 +34,6 @@ export const FETCH_BLOG_DETAILS_QUERY = gql`
       id
       author
       created_at
-      likes
       title
       url
       user {
@@ -49,6 +52,11 @@ export const FETCH_BLOG_DETAILS_QUERY = gql`
           user_id
         }
       }
+      likes_aggregate {
+        aggregate {
+          count
+        }
+      }
     }
   }
 `;
@@ -62,8 +70,8 @@ export const DELETE_BLOG_MUTATION = gql`
 `;
 
 export const UPVOTE_BLOG_MUTATION = gql`
-  mutation UpvoteBlog($id: String!) {
-    update_blogs_by_pk(pk_columns: { id: $id }, _inc: { likes: 1 }) {
+  mutation UpvoteBlog($blog_id: String!) {
+    insert_blog_likes_one(object: { blog_id: $blog_id }) {
       id
     }
   }
