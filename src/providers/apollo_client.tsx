@@ -21,7 +21,7 @@ const createApolloClient = (authToken: string | Unset) => {
     : {};
 
   const httpLink = new HttpLink({
-    uri: envConfig.GRAPH_QL_URL,
+    uri: envConfig.GRAPHQL_URL,
     headers: {
       ...withAuth,
     },

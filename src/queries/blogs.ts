@@ -11,11 +11,6 @@ export const FETCH_BLOGS_QUERY = gql`
         id
         name
       }
-      likes_aggregate {
-        aggregate {
-          count
-        }
-      }
     }
   }
 `;
@@ -52,10 +47,10 @@ export const FETCH_BLOG_DETAILS_QUERY = gql`
           user_id
         }
       }
-      likes_aggregate {
-        aggregate {
-          count
-        }
+      likes {
+        id
+        blog_id
+        user_id
       }
     }
   }

@@ -69,17 +69,21 @@ const BlogDetails = () => {
     });
   };
 
-  const notAuthorized = user?.sub !== blog.user.id;
+  const isAuthorized = user?.sub === blog.user.id;
+  const hasAlreadyVoted = blog.likes.some(
+    (like) => like.user_id === user?.sub && like.blog_id === blog.id,
+  );
+
   return (
     <Section title={`${blog.title} by ${blog.author}`}>
       <a href={blog.url} rel="noreferrer" target="_blank">
         link
       </a>
       <div>
-        <span className="likes">{blog.likes_aggregate.aggregate?.count}</span>
+        <span className="likes">{blog.likes.length}</span>
         <button
           className="like-button"
-          disabled={isUpvoting || isBlogLoading}
+          disabled={isUpvoting || isBlogLoading || isAuthorized || hasAlreadyVoted}
           onClick={updateBlogLikes}>
           like
         </button>
@@ -87,9 +91,7 @@ const BlogDetails = () => {
       <div>
         <Link to={`/users/${blog.user.id}`}>{blog.user.name}</Link>
       </div>
-      <button disabled={notAuthorized} onClick={handleDelete}>
-        delete
-      </button>
+      {isAuthorized && <button onClick={handleDelete}>delete</button>}
 
       {blog.comments.length > 0 && <Comments comments={blog.comments} />}
 
