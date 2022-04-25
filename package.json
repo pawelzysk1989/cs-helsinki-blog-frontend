@@ -3,15 +3,17 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
+    "start": "npm run generate && npm run dev",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "lint:fix": "eslint ./src --ext .jsx,.js,.ts,.tsx --quiet --fix --ignore-path ./.gitignore",
-    "lint:format": "prettier  --loglevel warn --write \"./**/*.{js,jsx,ts,tsx,css,md,json}\" ",
+    "lint:format": "prettier --loglevel warn --write \"./**/*.{js,jsx,ts,tsx,css,md,json}\" ",
     "lint": "npm run lint:format && npm run lint:fix",
     "type-check": "tsc",
     "test": "jest ./src --verbose",
     "cypress:open": "cypress open",
-    "generate": "graphql-codegen --config codegen.js"
+    "generate": "graphql-codegen --config codegen.js -r dotenv/config",
+    "generate:watch": "npm run generate -- --watch"
   },
   "dependencies": {
     "@apollo/client": "^3.5.10",
