@@ -1,0 +1,61 @@
+query FetchBlogs {
+  blogs(order_by: { created_at: desc }) {
+    id
+    author
+    created_at
+    title
+    user {
+      id
+      name
+    }
+  }
+}
+
+mutation InsertBlog($author: String!, $title: String!, $url: String!) {
+  insert_blogs_one(object: { author: $author, title: $title, url: $url }) {
+    id
+  }
+}
+
+query FetchBlogDetails($id: String!) {
+  blogs_by_pk(id: $id) {
+    id
+    author
+    created_at
+    title
+    url
+    user {
+      id
+      name
+    }
+    comments(order_by: { created_at: asc }) {
+      id
+      content
+      created_at
+      user {
+        id
+        name
+      }
+      blog {
+        user_id
+      }
+    }
+    likes {
+      id
+      blog_id
+      user_id
+    }
+  }
+}
+
+mutation DeleteBlog($id: String!) {
+  delete_blogs_by_pk(id: $id) {
+    id
+  }
+}
+
+mutation UpvoteBlog($blog_id: String!) {
+  insert_blog_likes_one(object: { blog_id: $blog_id }) {
+    id
+  }
+}

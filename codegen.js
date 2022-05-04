@@ -8,11 +8,11 @@ module.exports = {
       },
     },
   ],
-  documents: ['./src/queries/*.tsx', './src/queries/*.ts'],
+  documents: ['./src/queries/*.graphql'],
   overwrite: true,
   generates: {
-    './src/generated/graphql.tsx': {
-      plugins: ['typescript', 'typescript-operations', 'typescript-react-apollo'],
+    './src/generated/queries/index.tsx': {
+      plugins: ['typescript', 'typescript-operations', 'typescript-urql'],
       config: {
         skipTypename: false,
         withHooks: true,

@@ -2,13 +2,13 @@ import { withAuthenticationRequired } from '@auth0/auth0-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { useFetchUsersQuery } from '../generated/graphql';
+import { useFetchUsersQuery } from '../generated/queries';
 import Section from './Section';
 
 const UserList = () => {
-  const { data, loading } = useFetchUsersQuery();
+  const [{ data, fetching }] = useFetchUsersQuery();
 
-  if (loading && !data) {
+  if (fetching && !data) {
     return <div>Loading...</div>;
   }
 

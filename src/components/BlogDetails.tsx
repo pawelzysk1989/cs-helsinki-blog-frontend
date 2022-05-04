@@ -6,7 +6,7 @@ import {
   useDeleteBlogMutation,
   useFetchBlogDetailsQuery,
   useUpvoteBlogMutation,
-} from '../generated/graphql';
+} from '../generated/queries';
 import useNotifications from '../hooks/use_notifications';
 import useUrlParams from '../hooks/use_url_params';
 import CommentForm from './CommentForm';
@@ -19,17 +19,13 @@ const BlogDetails = () => {
 
   const { blogId } = useUrlParams('blog');
   const { user } = useAuth0();
-  const {
-    data,
-    loading: isBlogLoading,
-    refetch,
-  } = useFetchBlogDetailsQuery({
+  const [{ data, fetching: isBlogLoading }] = useFetchBlogDetailsQuery({
     variables: {
       id: blogId,
     },
   });
-  const [upvoteBlog, { loading: isUpvoting }] = useUpvoteBlogMutation();
-  const [deleteBlog] = useDeleteBlogMutation();
+  const [{ fetching: isUpvoting }, upvoteBlog] = useUpvoteBlogMutation();
+  const [, deleteBlog] = useDeleteBlogMutation();
 
   if (isBlogLoading && !data) {
     return <div>Loading...</div>;
@@ -44,29 +40,24 @@ const BlogDetails = () => {
   const handleDelete = () => {
     if (window.confirm(`Delete ${blog.title}?`)) {
       deleteBlog({
-        variables: {
-          id: blog.id,
-        },
-        onCompleted() {
-          notifications.add({
-            type: 'success',
-            message: `A new blog '${blog.title}' by ${blog.author} removed`,
-          });
-          navigate('/blogs');
-        },
+        id: blog.id,
+      }).then((_) => {
+        notifications.add({
+          type: 'success',
+          message: `A new blog '${blog.title}' by ${blog.author} removed`,
+        });
+        navigate('/blogs');
       });
     }
   };
 
   const updateBlogLikes = () => {
-    upvoteBlog({
-      variables: {
+    upvoteBlog(
+      {
         blog_id: blog.id,
       },
-      onCompleted() {
-        refetch();
-      },
-    });
+      { additionalTypenames: ['blogs'] },
+    );
   };
 
   const isAuthorized = user?.sub === blog.user.id;

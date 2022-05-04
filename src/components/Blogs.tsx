@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { useFetchBlogsQuery } from '../generated/graphql';
+import { useFetchBlogsQuery } from '../generated/queries';
 import BlogList from './BlogList';
 import Section from './Section';
 
 const Blogs = () => {
-  const { data, loading } = useFetchBlogsQuery();
+  const [{ data, fetching }] = useFetchBlogsQuery();
 
-  if (loading && !data) {
+  if (fetching && !data) {
     return <div>Loading...</div>;
   }
 
