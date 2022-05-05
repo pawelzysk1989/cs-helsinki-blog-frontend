@@ -14,15 +14,15 @@ const UserDetails = () => {
     },
   });
 
-  if (fetching && !data?.users_by_pk) {
+  if (fetching && !data?.user_by_pk) {
     return <div>Loading...</div>;
   }
 
-  if (!data?.users_by_pk) {
+  if (!data?.user_by_pk) {
     return null;
   }
 
-  const user = data.users_by_pk;
+  const user = data.user_by_pk;
 
   return (
     <Section title={user.name}>

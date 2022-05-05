@@ -5,7 +5,7 @@ import BlogList from './BlogList';
 import Section from './Section';
 
 const Blogs = () => {
-  const [{ data, fetching }] = useFetchBlogsQuery();
+  const [{ data, fetching }] = useFetchBlogsQuery({ requestPolicy: 'cache-and-network' });
 
   if (fetching && !data) {
     return <div>Loading...</div>;
@@ -17,7 +17,7 @@ const Blogs = () => {
 
   return (
     <Section title="Blogs">
-      <BlogList blogs={data.blogs} />
+      <BlogList blogs={data.blog} />
     </Section>
   );
 };

@@ -1,5 +1,5 @@
 query FetchUsers {
-  users(order_by: { created_at: desc }) {
+  user(order_by: { created_at: desc }) {
     id
     name
     created_at
@@ -12,7 +12,7 @@ query FetchUsers {
 }
 
 query FetchUserById($user_id: String!) {
-  users_by_pk(id: $user_id) {
+  user_by_pk(id: $user_id) {
     id
     name
     created_at

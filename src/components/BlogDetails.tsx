@@ -9,6 +9,7 @@ import {
   useFetchBlogDetailsQuery,
   useUpvoteBlogMutation,
 } from '../queries/generated';
+import isUnset from '../utils/is_unset';
 import CommentForm from './CommentForm';
 import Comments from './Comments';
 import Section from './Section';
@@ -31,7 +32,7 @@ const BlogDetails = () => {
     return <div>Loading...</div>;
   }
 
-  const blog = data?.blogs_by_pk;
+  const blog = data?.blog_by_pk;
 
   if (!blog) {
     return null;
@@ -41,12 +42,14 @@ const BlogDetails = () => {
     if (window.confirm(`Delete ${blog.title}?`)) {
       deleteBlog({
         id: blog.id,
-      }).then((_) => {
-        notifications.add({
-          type: 'success',
-          message: `A new blog '${blog.title}' by ${blog.author} removed`,
-        });
-        navigate('/blogs');
+      }).then((result) => {
+        if (isUnset(result.error)) {
+          notifications.add({
+            type: 'success',
+            message: `A new blog '${blog.title}' by ${blog.author} removed`,
+          });
+          navigate('/blogs');
+        }
       });
     }
   };
@@ -54,8 +57,10 @@ const BlogDetails = () => {
   const updateBlogLikes = () => {
     upvoteBlog({
       blog_id: blog.id,
-    }).then(() => {
-      refetchBlog({ requestPolicy: 'network-only' });
+    }).then((result) => {
+      if (isUnset(result.error)) {
+        refetchBlog({ requestPolicy: 'network-only' });
+      }
     });
   };
 

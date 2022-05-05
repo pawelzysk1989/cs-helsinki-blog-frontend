@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import useUrlParams from '../hooks/use_url_params';
 import { usePostBlogCommentMutation } from '../queries/generated';
+import isUnset from '../utils/is_unset';
 import Section from './Section';
 
 const CommentForm = () => {
@@ -15,8 +16,10 @@ const CommentForm = () => {
     postComment({
       blogId,
       content: comment,
-    }).then(() => {
-      setComment('');
+    }).then((result) => {
+      if (isUnset(result.error)) {
+        setComment('');
+      }
     });
   };
 

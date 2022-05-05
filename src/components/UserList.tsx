@@ -24,7 +24,7 @@ const UserList = () => {
           <span>blogs created</span>
         </div>
 
-        {data.users.map((user) => (
+        {data.user.map((user) => (
           <div key={user.id} className="user-list__item">
             <Link to={`/users/${user.id}`}>{user.name}</Link>
             <span>{user.blogs_aggregate.aggregate?.count}</span>

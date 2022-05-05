@@ -13,6 +13,7 @@ import { Provider } from 'urql';
 import { Unset } from '../types/unset';
 import envConfig from '../utils/env_config';
 import isSet from '../utils/is_set';
+import isUnset from '../utils/is_unset';
 
 const createUrqlClient = (authToken: string | Unset) => {
   return createClient({
@@ -47,12 +48,14 @@ const UrqlProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const getAccessToken = async () => await getAccessTokenSilently();
-    getAccessToken().then(setAccessToken).catch(console.error);
+    if (isSet(user)) {
+      getAccessToken().then(setAccessToken).catch(console.error);
+    }
   }, [getAccessTokenSilently, user]);
 
   const client = useMemo(() => createUrqlClient(accessToken), [accessToken]);
 
-  if (isLoading || (isAuthenticated && !accessToken)) {
+  if (isLoading || (isAuthenticated && isUnset(accessToken))) {
     return <div>Loading...</div>;
   }
 

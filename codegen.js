@@ -24,4 +24,11 @@ module.exports = {
       plugins: ['introspection'],
     },
   },
+  config: {
+    scalars: {
+      Date: 'string',
+      timestamptz: 'string',
+      uuid: 'string',
+    },
+  },
 };

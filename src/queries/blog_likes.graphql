@@ -1,0 +1,5 @@
+mutation UpvoteBlog($blog_id: uuid!) {
+  insert_blog_likes_one(object: { blog_id: $blog_id }) {
+    id
+  }
+}

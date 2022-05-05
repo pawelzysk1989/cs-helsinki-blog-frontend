@@ -1,0 +1,9 @@
+mutation PostBlogComment($blogId: uuid!, $content: String!) {
+  insert_comment_one(object: { blog_id: $blogId, content: $content }) {
+    id
+    blog_id
+    content
+    created_at
+    updated_at
+  }
+}

@@ -1,5 +1,5 @@
 query FetchBlogs {
-  blogs(order_by: { created_at: desc }) {
+  blog(order_by: { created_at: desc }) {
     id
     author
     created_at
@@ -12,13 +12,13 @@ query FetchBlogs {
 }
 
 mutation InsertBlog($author: String!, $title: String!, $url: String!) {
-  insert_blogs_one(object: { author: $author, title: $title, url: $url }) {
+  insert_blog_one(object: { author: $author, title: $title, url: $url }) {
     id
   }
 }
 
-query FetchBlogDetails($id: String!) {
-  blogs_by_pk(id: $id) {
+query FetchBlogDetails($id: uuid!) {
+  blog_by_pk(id: $id) {
     id
     author
     created_at
@@ -49,14 +49,8 @@ query FetchBlogDetails($id: String!) {
   }
 }
 
-mutation DeleteBlog($id: String!) {
-  delete_blogs_by_pk(id: $id) {
-    id
-  }
-}
-
-mutation UpvoteBlog($blog_id: String!) {
-  insert_blog_likes_one(object: { blog_id: $blog_id }) {
+mutation DeleteBlog($id: uuid!) {
+  delete_blog_by_pk(id: $id) {
     id
   }
 }

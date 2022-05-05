@@ -4,7 +4,7 @@ import React from 'react';
 import { FetchBlogDetailsQuery } from '../queries/generated';
 
 type Props = {
-  comments: NonNullable<FetchBlogDetailsQuery['blogs_by_pk']>['comments'];
+  comments: NonNullable<FetchBlogDetailsQuery['blog_by_pk']>['comments'];
 };
 
 const Comments = ({ comments }: Props) => {

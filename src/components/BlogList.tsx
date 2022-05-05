@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { FetchBlogsQuery } from '../queries/generated';
 
 type Props = {
-  blogs: FetchBlogsQuery['blogs'];
+  blogs: FetchBlogsQuery['blog'];
 };
 
 const BlogList = ({ blogs }: Props) => {
