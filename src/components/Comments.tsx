@@ -1,7 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 
-import { FetchBlogDetailsQuery } from '../generated/graphql';
+import { FetchBlogDetailsQuery } from '../queries/generated';
 
 type Props = {
   comments: NonNullable<FetchBlogDetailsQuery['blogs_by_pk']>['comments'];

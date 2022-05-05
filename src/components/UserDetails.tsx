@@ -1,20 +1,20 @@
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 import React from 'react';
 
-import { useFetchUserByIdQuery } from '../generated/graphql';
 import useUrlParams from '../hooks/use_url_params';
+import { useFetchUserByIdQuery } from '../queries/generated';
 import BlogList from './BlogList';
 import Section from './Section';
 
 const UserDetails = () => {
   const { userId } = useUrlParams('user');
-  const { data, loading } = useFetchUserByIdQuery({
+  const [{ data, fetching }] = useFetchUserByIdQuery({
     variables: {
       user_id: userId,
     },
   });
 
-  if (loading && !data?.users_by_pk) {
+  if (fetching && !data?.users_by_pk) {
     return <div>Loading...</div>;
   }
 

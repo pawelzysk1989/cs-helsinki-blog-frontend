@@ -16,7 +16,6 @@
     "generate:watch": "npm run generate -- --watch"
   },
   "dependencies": {
-    "@apollo/client": "^3.5.10",
     "@auth0/auth0-react": "^1.9.0",
     "jotai": "^1.5.3",
     "react": "^17.0.2",

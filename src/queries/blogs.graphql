@@ -37,6 +37,7 @@ query FetchBlogDetails($id: String!) {
         name
       }
       blog {
+        id
         user_id
       }
     }

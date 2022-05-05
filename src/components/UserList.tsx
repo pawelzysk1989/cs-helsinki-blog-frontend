@@ -2,7 +2,7 @@ import { withAuthenticationRequired } from '@auth0/auth0-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { useFetchUsersQuery } from '../generated/queries';
+import { useFetchUsersQuery } from '../queries/generated';
 import Section from './Section';
 
 const UserList = () => {

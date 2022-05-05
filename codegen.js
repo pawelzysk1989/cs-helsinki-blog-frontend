@@ -11,7 +11,7 @@ module.exports = {
   documents: ['./src/queries/*.graphql'],
   overwrite: true,
   generates: {
-    './src/generated/queries/index.tsx': {
+    './src/queries/generated/index.tsx': {
       plugins: ['typescript', 'typescript-operations', 'typescript-urql'],
       config: {
         skipTypename: false,

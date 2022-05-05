@@ -2,8 +2,8 @@ import { withAuthenticationRequired } from '@auth0/auth0-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useInsertBlogMutation } from '../generated/queries';
 import useNotifications from '../hooks/use_notifications';
+import { useInsertBlogMutation } from '../queries/generated';
 import InputField from './InputField';
 import Section from './Section';
 

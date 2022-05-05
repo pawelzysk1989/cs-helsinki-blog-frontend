@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useFetchBlogsQuery } from '../generated/queries';
+import { useFetchBlogsQuery } from '../queries/generated';
 import BlogList from './BlogList';
 import Section from './Section';
 
