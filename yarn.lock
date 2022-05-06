@@ -3869,10 +3869,10 @@
   dependencies:
     "tslib" "^2.1.0"
 
-"graphql-ws@^5.4.1":
-  "integrity" "sha512-8yYuvnyqIjlJ/WfebOyu2GSOQeFauRxnfuTveY9yvrDGs2g3kR9Nv4gu40AKvRHbXlSJwTbMJ6dVxAtEyKwVRA=="
-  "resolved" "https://registry.npmjs.org/graphql-ws/-/graphql-ws-5.7.0.tgz"
-  "version" "5.7.0"
+"graphql-ws@^5.4.1", "graphql-ws@^5.8.1":
+  "integrity" "sha512-UVf/fxlHultC1+12tX9ShTIipqQFNZ96g7N51RFQlk7MFPsDUUMCR3QXVEzHEd5xlTp16rs5vCyfBljvcPN3fA=="
+  "resolved" "https://registry.npmjs.org/graphql-ws/-/graphql-ws-5.8.1.tgz"
+  "version" "5.8.1"
 
 "graphql@^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0", "graphql@^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0", "graphql@^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0", "graphql@^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0", "graphql@^14.0.0 || ^15.0.0 || ^16.0.0", "graphql@^15.0.0", "graphql@^15.0.0 || ^16.0.0", "graphql@^15.4.0 || ^16.0.0", "graphql@^15.7.2 || ^16.0.0", "graphql@>= 0.11.0", "graphql@>=0.11 <=16", "graphql@14 - 16":
   "integrity" "sha512-5gghUc24tP9HRznNpV2+FIoq3xKkj5dTQqf4v0CpdPbFVwFkWoxOM+o+2OC9ZSvjEMTjfmG9QT+gcvggTwW1zw=="

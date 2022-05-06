@@ -5,8 +5,10 @@ import {
   dedupExchange,
   errorExchange,
   fetchExchange,
+  subscriptionExchange,
 } from '@urql/core';
 import { devtoolsExchange } from '@urql/devtools';
+import { createClient as createWSClient } from 'graphql-ws';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Provider } from 'urql';
 
@@ -16,16 +18,22 @@ import isSet from '../utils/is_set';
 import isUnset from '../utils/is_unset';
 
 const createUrqlClient = (authToken: string | Unset) => {
+  const headers = { authorization: isSet(authToken) ? `Bearer ${authToken}` : '' };
+
+  const wsClient = createWSClient({
+    url: envConfig.GRAPHQL_WS,
+    connectionParams: {
+      headers,
+    },
+  });
+
   return createClient({
     url: envConfig.GRAPHQL_URL,
     fetchOptions: {
-      headers: { authorization: isSet(authToken) ? `Bearer ${authToken}` : '' },
+      headers,
     },
     exchanges: [
       devtoolsExchange,
-      dedupExchange,
-      cacheExchange,
-      fetchExchange,
       errorExchange({
         onError: (error) => {
           if (error.graphQLErrors.length)
@@ -37,6 +45,16 @@ const createUrqlClient = (authToken: string | Unset) => {
 
           if (error.networkError) console.error(`[Network error]: ${error.networkError}`);
         },
+      }),
+      dedupExchange,
+      cacheExchange,
+      fetchExchange,
+      subscriptionExchange({
+        forwardSubscription: (operation) => ({
+          subscribe: (sink) => ({
+            unsubscribe: wsClient.subscribe(operation, sink),
+          }),
+        }),
       }),
     ],
   });

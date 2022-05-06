@@ -5,8 +5,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import useNotifications from '../hooks/use_notifications';
 import useUrlParams from '../hooks/use_url_params';
 import {
+  useBlogDetailsSubscription,
   useDeleteBlogMutation,
-  useFetchBlogDetailsQuery,
   useUpvoteBlogMutation,
 } from '../queries/generated';
 import isUnset from '../utils/is_unset';
@@ -14,21 +14,16 @@ import CommentForm from './CommentForm';
 import Comments from './Comments';
 import Section from './Section';
 
-const context = {
-  additionalTypenames: ['blog_likes', 'comment'],
-};
-
 const BlogDetails = () => {
   const notifications = useNotifications();
   const navigate = useNavigate();
 
   const { blogId } = useUrlParams('blog');
   const { user } = useAuth0();
-  const [{ data, fetching: isFetchingBlog }] = useFetchBlogDetailsQuery({
+  const [{ data, fetching: isFetchingBlog }] = useBlogDetailsSubscription({
     variables: {
       id: blogId,
     },
-    context,
   });
   const [{ fetching: isUpvoting }, upvoteBlog] = useUpvoteBlogMutation();
   const [, deleteBlog] = useDeleteBlogMutation();
@@ -39,7 +34,7 @@ const BlogDetails = () => {
 
   const blog = data?.blog_by_pk;
 
-  if (!blog) {
+  if (isUnset(blog)) {
     return null;
   }
 

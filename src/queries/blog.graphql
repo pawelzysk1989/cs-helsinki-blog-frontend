@@ -16,16 +16,6 @@ query FetchBlogs {
   }
 }
 
-mutation InsertBlog($author: String!, $title: String!, $url: String!) {
-  insert_blog_one(object: { author: $author, title: $title, url: $url }) {
-    ...blogDetails
-    user {
-      id
-      name
-    }
-  }
-}
-
 query FetchBlogDetails($id: uuid!) {
   blog_by_pk(id: $id) {
     ...blogDetails
@@ -51,6 +41,40 @@ query FetchBlogDetails($id: uuid!) {
       blog_id
       user_id
     }
+  }
+}
+
+subscription BlogDetails($id: uuid!) {
+  blog_by_pk(id: $id) {
+    ...blogDetails
+    user {
+      id
+      name
+    }
+    comments(order_by: { created_at: asc }) {
+      id
+      content
+      created_at
+      user {
+        id
+        name
+      }
+      blog {
+        id
+        user_id
+      }
+    }
+    likes {
+      id
+      blog_id
+      user_id
+    }
+  }
+}
+
+mutation InsertBlog($author: String!, $title: String!, $url: String!) {
+  insert_blog_one(object: { author: $author, title: $title, url: $url }) {
+    id
   }
 }
 

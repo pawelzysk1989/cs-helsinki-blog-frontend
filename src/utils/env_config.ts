@@ -4,6 +4,7 @@ const {
   VITE_AUTH_CLIENT_ID,
   VITE_AUTH_CONNECTION,
   VITE_GRAPHQL_URL,
+  VITE_GRAPHQL_WS,
 } = import.meta.env;
 
 if (!VITE_AUTH_AUDIENCE || typeof VITE_AUTH_AUDIENCE !== 'string') {
@@ -24,6 +25,9 @@ if (!VITE_AUTH_CONNECTION || typeof VITE_AUTH_CONNECTION !== 'string') {
 if (!VITE_GRAPHQL_URL || typeof VITE_GRAPHQL_URL !== 'string') {
   throw Error('VITE_GRAPHQL_URL is missing');
 }
+if (!VITE_GRAPHQL_WS || typeof VITE_GRAPHQL_WS !== 'string') {
+  throw Error('VITE_GRAPHQL_WS is missing');
+}
 
 export default {
   AUTH_AUDIENCE: VITE_AUTH_AUDIENCE,
@@ -31,4 +35,5 @@ export default {
   AUTH_CLIENT_ID: VITE_AUTH_CLIENT_ID,
   AUTH_CONNECTION: VITE_AUTH_CONNECTION,
   GRAPHQL_URL: VITE_GRAPHQL_URL,
+  GRAPHQL_WS: VITE_GRAPHQL_WS,
 };

@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@auth0/auth0-react": "^1.9.0",
+    "graphql-ws": "^5.8.1",
     "jotai": "^1.5.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
