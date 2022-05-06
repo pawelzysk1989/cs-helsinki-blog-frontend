@@ -25,6 +25,7 @@ const createUrqlClient = (authToken: string | Unset) => {
       devtoolsExchange,
       dedupExchange,
       cacheExchange,
+      fetchExchange,
       errorExchange({
         onError: (error) => {
           if (error.graphQLErrors.length)
@@ -37,7 +38,6 @@ const createUrqlClient = (authToken: string | Unset) => {
           if (error.networkError) console.error(`[Network error]: ${error.networkError}`);
         },
       }),
-      fetchExchange,
     ],
   });
 };

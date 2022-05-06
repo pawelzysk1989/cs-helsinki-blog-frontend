@@ -14,21 +14,26 @@ import CommentForm from './CommentForm';
 import Comments from './Comments';
 import Section from './Section';
 
+const context = {
+  additionalTypenames: ['blog_likes', 'comment'],
+};
+
 const BlogDetails = () => {
   const notifications = useNotifications();
   const navigate = useNavigate();
 
   const { blogId } = useUrlParams('blog');
   const { user } = useAuth0();
-  const [{ data, fetching: isBlogLoading }, refetchBlog] = useFetchBlogDetailsQuery({
+  const [{ data, fetching: isFetchingBlog }] = useFetchBlogDetailsQuery({
     variables: {
       id: blogId,
     },
+    context,
   });
   const [{ fetching: isUpvoting }, upvoteBlog] = useUpvoteBlogMutation();
   const [, deleteBlog] = useDeleteBlogMutation();
 
-  if (isBlogLoading && !data) {
+  if (isFetchingBlog && !data) {
     return <div>Loading...</div>;
   }
 
@@ -57,10 +62,6 @@ const BlogDetails = () => {
   const updateBlogLikes = () => {
     upvoteBlog({
       blog_id: blog.id,
-    }).then((result) => {
-      if (isUnset(result.error)) {
-        refetchBlog({ requestPolicy: 'network-only' });
-      }
     });
   };
 
@@ -78,7 +79,7 @@ const BlogDetails = () => {
         <span className="likes">{blog.likes.length}</span>
         <button
           className="like-button"
-          disabled={isUpvoting || isBlogLoading || isAuthorized || hasAlreadyVoted}
+          disabled={isUpvoting || isFetchingBlog || isAuthorized || hasAlreadyVoted}
           onClick={updateBlogLikes}>
           like
         </button>

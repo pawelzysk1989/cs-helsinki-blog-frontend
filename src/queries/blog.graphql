@@ -1,9 +1,14 @@
+fragment blogDetails on blog {
+  id
+  author
+  created_at
+  title
+  url
+}
+
 query FetchBlogs {
   blog(order_by: { created_at: desc }) {
-    id
-    author
-    created_at
-    title
+    ...blogDetails
     user {
       id
       name
@@ -13,17 +18,17 @@ query FetchBlogs {
 
 mutation InsertBlog($author: String!, $title: String!, $url: String!) {
   insert_blog_one(object: { author: $author, title: $title, url: $url }) {
-    id
+    ...blogDetails
+    user {
+      id
+      name
+    }
   }
 }
 
 query FetchBlogDetails($id: uuid!) {
   blog_by_pk(id: $id) {
-    id
-    author
-    created_at
-    title
-    url
+    ...blogDetails
     user {
       id
       name
